@@ -25,6 +25,6 @@ int main(int argc, char* argv[]) {
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
     while(1) {
-
+        
     }
 }
