@@ -130,22 +130,23 @@ int main(int argc, char* argv[]) {
                 //for (int i = 0; i < size; i++)  //ten for chyba nie jest potrzebny
                 //{
                     //odbierz pakiet od dowolnego procesu
+                    packet_t allow_packet;
                     printf("[%d] [L:%d] Czekam na wiadomości czy mogę wejść\n", rank, zegarLamporta);
-                    MPI_Recv(rec_pkt, 1, MPI_PAKIET_T, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+                    MPI_Recv(&allow_packet, 1, MPI_PAKIET_T, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
                     //aktualizuj zegarLamporta po Recv
-                    zegarLamporta = max(zegarLamporta, rec_pkt->timestamp) + 1;
+                    zegarLamporta = max(zegarLamporta, allow_packet.timestamp) + 1;
                     printf("[%d] [L:%d] Otrzymałem wiadomość żę mogę wejść\n", rank, zegarLamporta);
                     //oznacz w tablicy czy_odp ze juz przyszla odpowiedz od tego procesu
                     czy_odp.at(status.MPI_SOURCE) = 1;
                     //jesli ok to nie ma problemu
-                    if(rec_pkt->info == OK)
+                    if(allow_packet.info == OK)
                     {
                         kolejka_procesow.at(status.MPI_SOURCE) = 0;
                     }
                     //jesli tez CHCEWEJSC przechowujemy jego timestamp
-                    else if(rec_pkt->info == CHCEWEJSC)
+                    else if(allow_packet.info == CHCEWEJSC)
                     {
-                        kolejka_procesow.at(status.MPI_SOURCE) = rec_pkt->timestamp;
+                        kolejka_procesow.at(status.MPI_SOURCE) = allow_packet.timestamp;
                     }
                     //sprawdzamy czy mamy juz odpowiedz od wszystkich
                     for(int j = 0; j < size; j++)
