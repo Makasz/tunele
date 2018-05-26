@@ -12,6 +12,7 @@
 #define CHCEWEJSC 1
 #define WEJSCIE 1
 
+
 using namespace std;
 
 typedef struct {
@@ -59,10 +60,9 @@ int max(int a, int b)
 }
 
 void *znajdz_wycieczke(void* wyc_a) {
-    int *wyc = (int *)wyc_a;
+    int * wyc = (int *)wyc_a;
     if(*wyc == 0){
-        int los = losuj();
-        wyc_a = (void*)&los;
+        *wyc = losuj();
         printf("Wylosowałem %d\n", (int)wyc_a);
         usleep(5000000);
     }
@@ -71,7 +71,6 @@ void *znajdz_wycieczke(void* wyc_a) {
 MPI_Datatype MPI_PAKIET_T;
 
 int main(int argc, char* argv[]) {
-    int wycieczka;
     int zegarLamporta = 0;
     packet_t *rec_pkt;   //bylo pakiet_t ale zmienilem na packet_t bo chyba bylo zle
     MPI_Status status;
@@ -113,7 +112,8 @@ int main(int argc, char* argv[]) {
 
     pthread_t* thread_id;
     int rc;
-    rc = pthread_create(thread_id, NULL, znajdz_wycieczke, (void *)&wycieczka);
+    int wycieczka = 0;
+    rc = pthread_create(thread_id, NULL, znajdz_wycieczke, (void*)&wycieczka);
 
     while(1) {
         //jesli przyszla wycieczka rob wszystko - wyslij CHCEWEJSC i czekaj na odpowiedzi od innych
