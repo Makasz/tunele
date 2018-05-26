@@ -170,11 +170,11 @@ int main(int argc, char* argv[]) {
             {   
                 packet_t test;
                 MPI_Recv(&test, 1, MPI_PAKIET_T, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
-                printf("[%d] [L:%d] Otrzymałem żądanie od [%d] [L:%d]\n", rank, zegarLamporta, status.MPI_SOURCE, test->timestamp);
+                printf("[%d] [L:%d] Otrzymałem żądanie od [%d] [L:%d]\n", rank, zegarLamporta, status.MPI_SOURCE, test.timestamp);
                 //aktualizuj zegarLamporta po Recv
-                zegarLamporta = max(zegarLamporta, test->timestamp) + 1;
+                zegarLamporta = max(zegarLamporta, test.timestamp) + 1;
                 //jesli otrzymano CHCEWEJSC odeslij OK
-                if(test->info == CHCEWEJSC)
+                if(test.info == CHCEWEJSC)
                 {
                     packet_t pkt;
                     pkt.info = OK;
