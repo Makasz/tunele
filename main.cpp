@@ -61,7 +61,7 @@ MPI_Datatype MPI_PAKIET_T;
 
 int main(int argc, char* argv[]) {
     int zegarLamporta = 0;
-    packet_t *rec_pkt;   //bylo pakiet_t ale zmienilem na packet_t bo chyba bylo zle
+       //bylo pakiet_t ale zmienilem na packet_t bo chyba bylo zle
     MPI_Status status;
 
     MPI_Init(&argc, &argv);
@@ -140,7 +140,7 @@ int main(int argc, char* argv[]) {
                     MPI_Recv( &rec_pkt, 1, MPI_PAKIET_T, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
                     //aktualizuj zegarLamporta po Recv
                     zegarLamporta = max(zegarLamporta, rec_pkt->timestamp) + 1;
-                    printf("[%d] [L:%d] Otrzymałem wiadomość", rank, zegarLamporta);
+                    printf("[%d] [L:%d] Otrzymałem wiadomość %d o zegarze %d", rank, zegarLamporta, rec_pkt->);
                     //oznacz w tablicy czy_odp ze juz przyszla odpowiedz od tego procesu
                     czy_odp.at(status.MPI_SOURCE) = 1;
                     //jesli ok to nie ma problemu
@@ -168,9 +168,12 @@ int main(int argc, char* argv[]) {
         //jesli nie przyszla wycieczka odsylaj innym odpowiedzi
         else
         {
+            packet_t *rec_pkt;
+            printf("[%d] [L:%d] Oczekuję na żądania", rank, zegarLamporta);
             for (int i = 0; i < size; i++)
-            {
-                MPI_Recv( &rec_pkt, 1, MPI_PAKIET_T, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+            {   
+                MPI_Recv(rec_pkt, 1, MPI_PAKIET_T, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+                printf("[%d] [L:%d] Otrzymałem żądanie", rank, zegarLamporta);
                 //aktualizuj zegarLamporta po Recv
                 zegarLamporta = max(zegarLamporta, rec_pkt->timestamp) + 1;
                 //jesli otrzymano CHCEWEJSC odeslij OK
@@ -179,6 +182,7 @@ int main(int argc, char* argv[]) {
                     packet_t pkt;
                     pkt.info = OK;
                     pkt.timestamp = zegarLamporta;
+                    printf("[%d] [L:%d] Odpowiadam na żądanie", rank, zegarLamporta);
                     MPI_Send(&pkt, 1, MPI_PAKIET_T, status.MPI_SOURCE, WEJSCIE, MPI_COMM_WORLD );
                     //inkrementuj zegarLamporta po Send
                     zegarLamporta++;
