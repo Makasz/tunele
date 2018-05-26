@@ -6,7 +6,7 @@
 #include <random>
 #include <vector>
 #include <unistd.h>
-#include <pthread.h>
+#include <thread>
 
 #define SEED 35791246
 #define OK 0
@@ -60,14 +60,11 @@ int max(int a, int b)
     else  return b;
 }
 
-void *znajdz_wycieczke(void* wyc_a) {
-    int wyc = *((int *)(&wyc_a));
-    printf("Wyc: %d\n", wyc);
-    if(wyc == 0){
-
+void znajdz_wycieczke(int* wyc_a) {
+    if(*wyc_a == 0){
         int loc = losuj();
-        wyc_a = (void*)&loc;
-        printf("Wylosowałem %d\n", *((int *)wyc_a));
+        wyc_a = &loc;
+        printf("Wylosowałem %d\n", *wyc_a));
         usleep(5000000);
     }
 }
@@ -118,7 +115,7 @@ int main(int argc, char* argv[]) {
     int rc;
     int wycieczka = 0;
     printf("Starting thread!\n");
-    rc = pthread_create(&thread_id, NULL, znajdz_wycieczke, (void*)&wycieczka);
+    thread losowanie(znajdz_wycieczke, &wycieczka);
     printf("Thread started!\n");
     while(1) {
         //jesli przyszla wycieczka rob wszystko - wyslij CHCEWEJSC i czekaj na odpowiedzi od innych
