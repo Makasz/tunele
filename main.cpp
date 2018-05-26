@@ -61,11 +61,13 @@ int max(int a, int b)
 }
 
 void znajdz_wycieczke(int* wyc_a) {
-    if(*wyc_a == 0){
-        int loc = losuj();
-        wyc_a = &loc;
-        printf("Wylosowałem %d\n", *wyc_a);
-        usleep(5000000);
+    while(1) {
+        if(*wyc_a == 0){
+            int loc = losuj();
+            wyc_a = &loc;
+            printf("Wylosowałem %d\n", *wyc_a);
+            usleep(5000000);
+        }
     }
 }
 
