@@ -5,6 +5,7 @@
 #include <random>
 #include <vector>
 #include <unistd.h>
+#include <pthread.h>
 
 #define SEED 35791246
 #define OK 0
@@ -57,9 +58,14 @@ int max(int a, int b)
     else  return b;
 }
 
+void *znajdz_wycieczke(int &wyc) {
+    wyc = losuj();
+}
+
 MPI_Datatype MPI_PAKIET_T;
 
 int main(int argc, char* argv[]) {
+    int wycieczka;
     int zegarLamporta = 0;
     packet_t *rec_pkt;   //bylo pakiet_t ale zmienilem na packet_t bo chyba bylo zle
     MPI_Status status;
@@ -97,10 +103,13 @@ int main(int argc, char* argv[]) {
         kolejka_procesow.push_back(-1);
         czy_odp.push_back(0);
     }
-    
     srand(time(0));
+
+    pthread_t thread_id;
+    int rc;
+    rc = pthread_create(thread_id, NULL, znajdz_wycieczke, NULL);
+
     while(1) {
-        int wycieczka = losuj();
         //jesli przyszla wycieczka rob wszystko - wyslij CHCEWEJSC i czekaj na odpowiedzi od innych
         printf("[%d] [L:%d] Czy mam wycieczkę: %d\n", rank, zegarLamporta, wycieczka);
         if (wycieczka)
