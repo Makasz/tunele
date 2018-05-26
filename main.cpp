@@ -54,25 +54,27 @@ int main(int argc, char* argv[]) {
 
     offsets[0] = offsetof(packet_t, info);
     offsets[1] = offsetof(packet_t, timestamp);
-
+    printf("1");
     MPI_Type_create_struct(nitems, blocklengths, offsets, typy, &MPI_PAKIET_T);
     MPI_Type_commit(&MPI_PAKIET_T);
 
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
-
+    printf("2");
     // int kolejka_procesow[size];
     // int czy_odp[size];
     // print()
 
     vector<int> kolejka_procesow;
     vector<int> czy_odp;
+        printf("3");
     for(int i = 0; i < size; i++)
     {
         kolejka_procesow.push_back(-1);
         czy_odp.push_back(0);
     }
     srand(time(0));
+        printf("4");
     while(1) {
         int wycieczka = losuj();
         printf("[%d] [L:%d] Czy mam wycieczkę: %d", rank, zegarLamporta, wycieczka);
