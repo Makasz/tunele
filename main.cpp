@@ -102,9 +102,8 @@ int main(int argc, char* argv[]) {
     while(1) {
         int wycieczka = losuj();
         //jesli przyszla wycieczka rob wszystko - wyslij CHCEWEJSC i czekaj na odpowiedzi od innych
-        wycieczka = rank;
         printf("[%d] [L:%d] Czy mam wycieczkę: %d\n", rank, zegarLamporta, wycieczka);
-        if (wycieczka == 0)
+        if (wycieczka)
         {
             //wyślij wszystkim CHCEWEJSC
             for (int i = 0; i < size; i++)
@@ -147,6 +146,7 @@ int main(int argc, char* argv[]) {
                     else if(allow_packet.info == CHCEWEJSC)
                     {
                         kolejka_procesow.at(status.MPI_SOURCE) = allow_packet.timestamp;
+                        //Narazie wystarczy, że dostaniemy odpowiedź od każdego żeby wysłać wycieczkę
                     }
                     //sprawdzamy czy mamy juz odpowiedz od wszystkich
                     for(int j = 0; j < size; j++)
@@ -158,6 +158,7 @@ int main(int argc, char* argv[]) {
                         end = true;
                         printf("[%d] [L:%d] Przesyłam wycieczkę! \n", rank, zegarLamporta);
                         usleep(2000000);
+                        break;
                     }
                 //}
             }
