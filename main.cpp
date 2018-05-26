@@ -61,7 +61,7 @@ int max(int a, int b)
 void *znajdz_wycieczke(void* wyc_a) {
     int *wyc = (int *)wyc_a;
     if(*wyc == 0){
-        *wyc = losuj();
+        *wyc_a = losuj();
         usleep(5000000);
     }
 }
