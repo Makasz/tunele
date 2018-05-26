@@ -46,7 +46,7 @@ void check_thread_support(int provided)
 }
 
 int losuj(){
-    int wycieczka = rand() % 10;
+    int wycieczka = rand() % 5;
     if (wycieczka == 1)
     {
         return 1;
