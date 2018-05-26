@@ -59,7 +59,10 @@ int max(int a, int b)
 }
 
 void *znajdz_wycieczke(int &wyc) {
-    wyc = losuj();
+    if(!wyc){
+        wyc = losuj();
+        usleep(5000000);
+    }
 }
 
 MPI_Datatype MPI_PAKIET_T;
@@ -107,13 +110,14 @@ int main(int argc, char* argv[]) {
 
     pthread_t thread_id;
     int rc;
-    rc = pthread_create(thread_id, NULL, znajdz_wycieczke, NULL);
+    rc = pthread_create(thread_id, NULL, znajdz_wycieczke, &wycieczka);
 
     while(1) {
         //jesli przyszla wycieczka rob wszystko - wyslij CHCEWEJSC i czekaj na odpowiedzi od innych
         printf("[%d] [L:%d] Czy mam wycieczkę: %d\n", rank, zegarLamporta, wycieczka);
         if (wycieczka)
         {
+            wycieczka = 0;
             //wyślij wszystkim CHCEWEJSC
             for (int i = 0; i < size; i++)
             {
@@ -149,7 +153,7 @@ int main(int argc, char* argv[]) {
                     //jesli ok to nie ma problemu
                     if(allow_packet.info == OK)
                     {
-                        kolejka_procesow.at(status.MPI_SOURCE) = 0;
+                        kolejka_procesow.at(status.MPI_SOURCE) = -1;
                     }
                     //jesli tez CHCEWEJSC przechowujemy jego timestamp
                     else if(allow_packet.info == CHCEWEJSC)
@@ -160,7 +164,7 @@ int main(int argc, char* argv[]) {
                     //sprawdzamy czy mamy juz odpowiedz od wszystkich
                     for(int j = 0; j < size; j++)
                     {
-                        if(czy_odp[j] == 0)
+                        if(czy_odp[j] == 0 )
                         {
                             break;
                         }
