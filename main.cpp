@@ -61,6 +61,7 @@ int max(int a, int b)
 }
 
 void znajdz_wycieczke(int* wyc_a) {
+    srand(time(0) + (int)this_thread::get_id());
     while(1) {
         if(*wyc_a == 0){
             int loc = losuj();
@@ -111,7 +112,7 @@ int main(int argc, char* argv[]) {
         kolejka_procesow.push_back(-1);
         czy_odp.push_back(0);
     }
-    srand(time(0));
+    
 
     pthread_t thread_id;
     int rc;
