@@ -62,6 +62,7 @@ int max(int a, int b)
 
 void *znajdz_wycieczke(void* wyc_a) {
     int wyc = *((int *)(&wyc_a));
+    printf("Wyc: %d\n", wyc);
     if(wyc == 0){
 
         int loc = losuj();
