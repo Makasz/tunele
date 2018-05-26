@@ -3,13 +3,14 @@
 #include "mpi.h"
 #include <math.h>
 #include <random>
+#include <vector>
 
 #define SEED 35791246
 #define OK 0
 #define CHCEWEJSC 1
 #define WEJSCIE 1
 
-using std;
+using namespace std;
 
 typedef struct {
     int appdata;
@@ -36,6 +37,7 @@ int max(int a, int b)
 MPI_Datatype MPI_PAKIET_T;
 
 int main(int argc, char* argv[]) {
+    
     int zegarLamporta = 0;
     int myid, nodenum, rank, size;
     packet_t *rec_pkt;   //bylo pakiet_t ale zmienilem na packet_t bo chyba bylo zle
