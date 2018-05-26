@@ -121,7 +121,7 @@ int main(int argc, char* argv[]) {
             	packet_t pkt;
                 pkt.info = CHCEWEJSC;
                 pkt.timestamp = zegarLamporta;  //wysylamy nasz zegarLamporta
-                printf("[%d] [L:%d] Wysyałam wiadomość: CHCEWEJSC\n", rank, zegarLamporta);
+                printf("[%d] [L:%d] Wysyałam wiadomość: CHCEWEJSC do i\n", rank, zegarLamporta);
             	MPI_Send(&pkt, 1, MPI_PAKIET_T, i, WEJSCIE, MPI_COMM_WORLD);
             }
             //inkrementuj zegarLamporta po broadcascie
@@ -137,6 +137,7 @@ int main(int argc, char* argv[]) {
                 //for (int i = 0; i < size; i++)  //ten for chyba nie jest potrzebny
                 //{
                     //odbierz pakiet od dowolnego procesu
+                    printf("[%d] [L:%d] Czekam na wiadomości czy mogę wejść\n", rank, zegarLamporta);
                     MPI_Recv(rec_pkt, 1, MPI_PAKIET_T, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
                     //aktualizuj zegarLamporta po Recv
                     zegarLamporta = max(zegarLamporta, rec_pkt->timestamp) + 1;
