@@ -37,7 +37,6 @@ int max(int a, int b)
 MPI_Datatype MPI_PAKIET_T;
 
 int main(int argc, char* argv[]) {
-    
     int zegarLamporta = 0;
     int myid, nodenum, rank, size;
     packet_t *rec_pkt;   //bylo pakiet_t ale zmienilem na packet_t bo chyba bylo zle
@@ -65,92 +64,92 @@ int main(int argc, char* argv[]) {
     // int czy_odp[size];
     // print()
 
-    vector<int> kolejka_procesow;
-    vector<int> czy_odp;
-        printf("3");
-    for(int i = 0; i < size; i++)
-    {
-        kolejka_procesow.push_back(-1);
-        czy_odp.push_back(0);
-    }
-    srand(time(0));
-        printf("4");
-    while(1) {
-        int wycieczka = losuj();
-        printf("[%d] [L:%d] Czy mam wycieczkę: %d", rank, zegarLamporta, wycieczka);
-        //jesli przyszla wycieczka rob wszystko - wyslij CHCEWEJSC i czekaj na odpowiedzi od innych
-        wycieczka = rank % 2;
-        if (wycieczka > 0)
-        {
-            //wyślij wszystkim CHCEWEJSC
-            for (int i = 0; i < size; i++)
-            {
-            	packet_t pkt;
-                pkt.info = CHCEWEJSC;
-                pkt.timestamp = zegarLamporta;  //wysylamy nasz zegarLamporta
-                printf("[%d] [L:%d] Wysyałam wiadomość: CHCEWEJSC", rank, zegarLamporta);
-            	MPI_Send(&pkt, 1, MPI_PAKIET_T, i, WEJSCIE, MPI_COMM_WORLD );
-            }
-            //inkrementuj zegarLamporta po broadcascie
-            zegarLamporta++;
-            //"odpowiedz" sam do siebie
-            czy_odp.at(rank) = 1;
-            kolejka_procesow.at(rank) = zegarLamporta;
+    // vector<int> kolejka_procesow;
+    // vector<int> czy_odp;
+    //     printf("3");
+    // for(int i = 0; i < size; i++)
+    // {
+    //     kolejka_procesow.push_back(-1);
+    //     czy_odp.push_back(0);
+    // }
+    // srand(time(0));
+    //     printf("4");
+    // while(1) {
+    //     int wycieczka = losuj();
+    //     printf("[%d] [L:%d] Czy mam wycieczkę: %d", rank, zegarLamporta, wycieczka);
+    //     //jesli przyszla wycieczka rob wszystko - wyslij CHCEWEJSC i czekaj na odpowiedzi od innych
+    //     wycieczka = rank % 2;
+    //     if (wycieczka > 0)
+    //     {
+    //         //wyślij wszystkim CHCEWEJSC
+    //         for (int i = 0; i < size; i++)
+    //         {
+    //         	packet_t pkt;
+    //             pkt.info = CHCEWEJSC;
+    //             pkt.timestamp = zegarLamporta;  //wysylamy nasz zegarLamporta
+    //             printf("[%d] [L:%d] Wysyałam wiadomość: CHCEWEJSC", rank, zegarLamporta);
+    //         	MPI_Send(&pkt, 1, MPI_PAKIET_T, i, WEJSCIE, MPI_COMM_WORLD );
+    //         }
+    //         //inkrementuj zegarLamporta po broadcascie
+    //         zegarLamporta++;
+    //         //"odpowiedz" sam do siebie
+    //         czy_odp.at(rank) = 1;
+    //         kolejka_procesow.at(rank) = zegarLamporta;
 
-            //czekaj na odpowiedz od wszystkich
-            bool end = false;
-            while( !end )
-            {
-                //for (int i = 0; i < size; i++)  //ten for chyba nie jest potrzebny
-                //{
-                    //odbierz pakiet od dowolnego procesu
-                    MPI_Recv( &rec_pkt, 1, MPI_PAKIET_T, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
-                    //aktualizuj zegarLamporta po Recv
-                    zegarLamporta = max(zegarLamporta, rec_pkt->timestamp) + 1;
-                    printf("[%d] [L:%d] Otrzymałem wiadomość", rank, zegarLamporta);
-                    //oznacz w tablicy czy_odp ze juz przyszla odpowiedz od tego procesu
-                    czy_odp.at(status.MPI_SOURCE) = 1;
-                    //jesli ok to nie ma problemu
-                    if(rec_pkt->info == OK)
-                    {
-                        kolejka_procesow.at(status.MPI_SOURCE) = 0;
-                    }
-                    //jesli tez CHCEWEJSC przechowujemy jego timestamp
-                    else if(rec_pkt->info == CHCEWEJSC)
-                    {
-                        kolejka_procesow.at(status.MPI_SOURCE) = rec_pkt->timestamp;
-                    }
-                    //sprawdzamy czy mamy juz odpowiedz od wszystkich
-                    for(int j = 0; j < size; j++)
-                    {
-                        if(czy_odp[j] == 0)
-                        {
-                            break;
-                        }
-                        end = true;
-                    }
-                //}
-            }
-        }
-        //jesli nie przyszla wycieczka odsylaj innym odpowiedzi
-        else
-        {
-            for (int i = 0; i < size; i++)
-            {
-                MPI_Recv( &rec_pkt, 1, MPI_PAKIET_T, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
-                //aktualizuj zegarLamporta po Recv
-                zegarLamporta = max(zegarLamporta, rec_pkt->timestamp) + 1;
-                //jesli otrzymano CHCEWEJSC odeslij OK
-                if(rec_pkt->info == CHCEWEJSC)
-                {
-                    packet_t pkt;
-                    pkt.info = OK;
-                    pkt.timestamp = zegarLamporta;
-                    MPI_Send(&pkt, 1, MPI_PAKIET_T, status.MPI_SOURCE, WEJSCIE, MPI_COMM_WORLD );
-                    //inkrementuj zegarLamporta po Send
-                    zegarLamporta++;
-                }
-            }
-        }
-    }
+    //         //czekaj na odpowiedz od wszystkich
+    //         bool end = false;
+    //         while( !end )
+    //         {
+    //             //for (int i = 0; i < size; i++)  //ten for chyba nie jest potrzebny
+    //             //{
+    //                 //odbierz pakiet od dowolnego procesu
+    //                 MPI_Recv( &rec_pkt, 1, MPI_PAKIET_T, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+    //                 //aktualizuj zegarLamporta po Recv
+    //                 zegarLamporta = max(zegarLamporta, rec_pkt->timestamp) + 1;
+    //                 printf("[%d] [L:%d] Otrzymałem wiadomość", rank, zegarLamporta);
+    //                 //oznacz w tablicy czy_odp ze juz przyszla odpowiedz od tego procesu
+    //                 czy_odp.at(status.MPI_SOURCE) = 1;
+    //                 //jesli ok to nie ma problemu
+    //                 if(rec_pkt->info == OK)
+    //                 {
+    //                     kolejka_procesow.at(status.MPI_SOURCE) = 0;
+    //                 }
+    //                 //jesli tez CHCEWEJSC przechowujemy jego timestamp
+    //                 else if(rec_pkt->info == CHCEWEJSC)
+    //                 {
+    //                     kolejka_procesow.at(status.MPI_SOURCE) = rec_pkt->timestamp;
+    //                 }
+    //                 //sprawdzamy czy mamy juz odpowiedz od wszystkich
+    //                 for(int j = 0; j < size; j++)
+    //                 {
+    //                     if(czy_odp[j] == 0)
+    //                     {
+    //                         break;
+    //                     }
+    //                     end = true;
+    //                 }
+    //             //}
+    //         }
+    //     }
+    //     //jesli nie przyszla wycieczka odsylaj innym odpowiedzi
+    //     else
+    //     {
+    //         for (int i = 0; i < size; i++)
+    //         {
+    //             MPI_Recv( &rec_pkt, 1, MPI_PAKIET_T, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+    //             //aktualizuj zegarLamporta po Recv
+    //             zegarLamporta = max(zegarLamporta, rec_pkt->timestamp) + 1;
+    //             //jesli otrzymano CHCEWEJSC odeslij OK
+    //             if(rec_pkt->info == CHCEWEJSC)
+    //             {
+    //                 packet_t pkt;
+    //                 pkt.info = OK;
+    //                 pkt.timestamp = zegarLamporta;
+    //                 MPI_Send(&pkt, 1, MPI_PAKIET_T, status.MPI_SOURCE, WEJSCIE, MPI_COMM_WORLD );
+    //                 //inkrementuj zegarLamporta po Send
+    //                 zegarLamporta++;
+    //             }
+    //         }
+    //     }
+    // }
 }
