@@ -4,6 +4,7 @@
 #include <math.h>
 #include <random>
 #include <vector>
+#include <unistd.h>
 
 #define SEED 35791246
 #define OK 0
@@ -71,7 +72,7 @@ int main(int argc, char* argv[]) {
     // MPI_Comm_rank(MPI_COMM_WORLD, &myid);           //get rank of node's process
     // MPI_Comm_size(MPI_COMM_WORLD, &nodenum);
     printf("-1");
-    sleep(1);
+    usleep(1000000);
     const int nitems=2;
     int blocklengths[2] = {1,1};
     MPI_Datatype typy[2] = {MPI_INT, MPI_INT};
