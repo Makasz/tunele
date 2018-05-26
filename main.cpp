@@ -61,14 +61,14 @@ int max(int a, int b)
 }
 
 void *znajdz_wycieczke(void* wyc_a) {
-    //int wyc = *((int *)(&wyc_a));
-    // if(wyc == 0){
+    int wyc = *((int *)(&wyc_a));
+    if(wyc == 0){
 
-    //     int loc = losuj();
-    //     wyc_a = (void*)&loc;
-    //     printf("Wylosowałem %d\n", *((int *)wyc_a));
-    //     usleep(5000000);
-    // }
+        int loc = losuj();
+        wyc_a = (void*)&loc;
+        printf("Wylosowałem %d\n", *((int *)wyc_a));
+        usleep(5000000);
+    }
 }
 
 MPI_Datatype MPI_PAKIET_T;
@@ -113,11 +113,11 @@ int main(int argc, char* argv[]) {
     }
     srand(time(0));
 
-    pthread_t* thread_id;
+    pthread_t thread_id;
     int rc;
     int wycieczka = 0;
     printf("Starting thread!\n");
-    rc = pthread_create(thread_id, NULL, znajdz_wycieczke, (void*)&wycieczka);
+    rc = pthread_create(&thread_id, NULL, znajdz_wycieczke, (void*)&wycieczka);
     printf("Thread started!\n");
     while(1) {
         //jesli przyszla wycieczka rob wszystko - wyslij CHCEWEJSC i czekaj na odpowiedzi od innych
