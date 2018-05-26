@@ -9,7 +9,7 @@
 #define CHCEWEJSC 1
 #define WEJSCIE 1
 
-namespace std;
+using std;
 
 typedef struct {
     int appdata;
