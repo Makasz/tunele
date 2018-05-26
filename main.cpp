@@ -115,6 +115,7 @@ int main(int argc, char* argv[]) {
     pthread_t* thread_id;
     int rc;
     int wycieczka = 0;
+    printf("Starting thread!\n");
     rc = pthread_create(thread_id, NULL, znajdz_wycieczke, (void*)&wycieczka);
 
     while(1) {
