@@ -41,8 +41,8 @@ int main(int argc, char* argv[]) {
     MPI_Status status;
 
     MPI_Init(&argc, &argv);                 //Start MPI
-    MPI_Comm_rank(MPI_COMM_WORLD, &myid);           //get rank of node's process
-    MPI_Comm_size(MPI_COMM_WORLD, &nodenum);
+    // MPI_Comm_rank(MPI_COMM_WORLD, &myid);           //get rank of node's process
+    // MPI_Comm_size(MPI_COMM_WORLD, &nodenum);
 
     const int nitems=2;
     int blocklengths[2] = {1,1};
