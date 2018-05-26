@@ -61,9 +61,9 @@ int max(int a, int b)
 }
 
 void *znajdz_wycieczke(void* wyc_a) {
-    //int * wyc = (int *)wyc_a;
-    if(1){
-        //*wyc = losuj();
+    int wyc = *((int *)(&wyc_a));
+    if(wyc == 0){
+        *wyc_a = (void*)losuj();
         printf("Wylosowałem %d\n", *((int *)wyc_a));
         usleep(5000000);
     }
@@ -111,10 +111,10 @@ int main(int argc, char* argv[]) {
     }
     srand(time(0));
 
-    // pthread_t* thread_id;
-    // int rc;
+    pthread_t* thread_id;
+    int rc;
     int wycieczka = 0;
-    // rc = pthread_create(thread_id, NULL, znajdz_wycieczke, (void*)&wycieczka);
+    rc = pthread_create(thread_id, NULL, znajdz_wycieczke, (void*)&wycieczka);
 
     while(1) {
         //jesli przyszla wycieczka rob wszystko - wyslij CHCEWEJSC i czekaj na odpowiedzi od innych
