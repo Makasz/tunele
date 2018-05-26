@@ -113,7 +113,7 @@ int main(int argc, char* argv[]) {
 
     // pthread_t* thread_id;
     // int rc;
-    // int wycieczka = 0;
+    int wycieczka = 0;
     // rc = pthread_create(thread_id, NULL, znajdz_wycieczke, (void*)&wycieczka);
 
     while(1) {
