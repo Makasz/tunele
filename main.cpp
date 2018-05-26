@@ -104,8 +104,7 @@ int main(int argc, char* argv[]) {
         kolejka_procesow.push_back(-1);
         czy_odp.push_back(0);
     }
-    MPI_Finalize();
-    return 0;
+    
     srand(time(0));
     printf("4\n");
     while(1) {
