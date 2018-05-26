@@ -75,13 +75,12 @@ int main(int argc, char* argv[]) {
     // MPI_Comm_rank(MPI_COMM_WORLD, &myid);           //get rank of node's process
     // MPI_Comm_size(MPI_COMM_WORLD, &nodenum);
     printf("-1");
-    usleep(1000000);
     const int nitems=2;
     int blocklengths[2] = {1,1};
     MPI_Datatype typy[2] = {MPI_INT, MPI_INT};
     MPI_Aint offsets[2];
 
-    return 0;
+
 
     printf("0");
     offsets[0] = offsetof(packet_t, info);
@@ -89,7 +88,7 @@ int main(int argc, char* argv[]) {
     printf("1");
     MPI_Type_create_struct(nitems, blocklengths, offsets, typy, &MPI_PAKIET_T);
     MPI_Type_commit(&MPI_PAKIET_T);
-
+    return 0;
     // MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     // MPI_Comm_size(MPI_COMM_WORLD, &size);
     printf("2");
