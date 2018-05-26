@@ -88,8 +88,8 @@ int main(int argc, char* argv[]) {
     printf("1");
     MPI_Type_create_struct(nitems, blocklengths, offsets, typy, &MPI_PAKIET_T);
     MPI_Type_commit(&MPI_PAKIET_T);
-    //     MPI_Finalize();
-    // return 0;
+    MPI_Finalize();
+    return 0;
     // MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     // MPI_Comm_size(MPI_COMM_WORLD, &size);
     printf("2");
