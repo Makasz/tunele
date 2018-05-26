@@ -110,7 +110,7 @@ int main(int argc, char* argv[]) {
     while(1) {
         int wycieczka = losuj();
         usleep(1000000);
-        printf("[%d] [L:%d] Czy mam wycieczkę: %d", rank, zegarLamporta, wycieczka);
+        printf("[%d] [L:%d] Czy mam wycieczkę: %d\n", rank, zegarLamporta, wycieczka);
         //jesli przyszla wycieczka rob wszystko - wyslij CHCEWEJSC i czekaj na odpowiedzi od innych
         wycieczka = rank % 2;
         if (wycieczka > 0)
@@ -121,7 +121,7 @@ int main(int argc, char* argv[]) {
             	packet_t pkt;
                 pkt.info = CHCEWEJSC;
                 pkt.timestamp = zegarLamporta;  //wysylamy nasz zegarLamporta
-                printf("[%d] [L:%d] Wysyałam wiadomość: CHCEWEJSC", rank, zegarLamporta);
+                printf("[%d] [L:%d] Wysyałam wiadomość: CHCEWEJSC\n", rank, zegarLamporta);
             	MPI_Send(&pkt, 1, MPI_PAKIET_T, i, WEJSCIE, MPI_COMM_WORLD );
             }
             //inkrementuj zegarLamporta po broadcascie
@@ -140,7 +140,7 @@ int main(int argc, char* argv[]) {
                     MPI_Recv(rec_pkt, 1, MPI_PAKIET_T, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
                     //aktualizuj zegarLamporta po Recv
                     zegarLamporta = max(zegarLamporta, rec_pkt->timestamp) + 1;
-                    printf("[%d] [L:%d] Otrzymałem wiadomość żę mogę wejść", rank, zegarLamporta);
+                    printf("[%d] [L:%d] Otrzymałem wiadomość żę mogę wejść\n", rank, zegarLamporta);
                     //oznacz w tablicy czy_odp ze juz przyszla odpowiedz od tego procesu
                     czy_odp.at(status.MPI_SOURCE) = 1;
                     //jesli ok to nie ma problemu
@@ -169,11 +169,11 @@ int main(int argc, char* argv[]) {
         else
         {
             
-            printf("[%d] [L:%d] Oczekuję na żądania", rank, zegarLamporta);
+            printf("[%d] [L:%d] Oczekuję na żądania\n", rank, zegarLamporta);
             for (int i = 0; i < size; i++)
             {   
                 MPI_Recv(rec_pkt, 1, MPI_PAKIET_T, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
-                printf("[%d] [L:%d] Otrzymałem żądanie", rank, zegarLamporta);
+                printf("[%d] [L:%d] Otrzymałem żądanie\n", rank, zegarLamporta);
                 //aktualizuj zegarLamporta po Recv
                 zegarLamporta = max(zegarLamporta, rec_pkt->timestamp) + 1;
                 //jesli otrzymano CHCEWEJSC odeslij OK
@@ -182,7 +182,7 @@ int main(int argc, char* argv[]) {
                     packet_t pkt;
                     pkt.info = OK;
                     pkt.timestamp = zegarLamporta;
-                    printf("[%d] [L:%d] Odpowiadam na żądanie", rank, zegarLamporta);
+                    printf("[%d] [L:%d] Odpowiadam na żądanie\n", rank, zegarLamporta);
                     MPI_Send(&pkt, 1, MPI_PAKIET_T, status.MPI_SOURCE, WEJSCIE, MPI_COMM_WORLD );
                     //inkrementuj zegarLamporta po Send
                     zegarLamporta++;
