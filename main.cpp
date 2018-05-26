@@ -117,7 +117,7 @@ int main(int argc, char* argv[]) {
     int wycieczka = 0;
     printf("Starting thread!\n");
     rc = pthread_create(thread_id, NULL, znajdz_wycieczke, (void*)&wycieczka);
-
+    printf("Thread started!\n");
     while(1) {
         //jesli przyszla wycieczka rob wszystko - wyslij CHCEWEJSC i czekaj na odpowiedzi od innych
         printf("[%d] [L:%d] Czy mam wycieczkę: %d\n", rank, zegarLamporta, wycieczka);
