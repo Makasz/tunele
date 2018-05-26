@@ -43,8 +43,8 @@ void check_thread_support(int provided)
 }
 
 int losuj(){
-    int wycieczka = rand()%100;
-    if (wycieczka > 10)
+    int wycieczka = rand() % 10;
+    if (wycieczka = 1)
     {
         wycieczka = 0;
     }
@@ -109,6 +109,7 @@ int main(int argc, char* argv[]) {
     printf("4\n");
     while(1) {
         int wycieczka = losuj();
+        usleep(1000000);
         printf("[%d] [L:%d] Czy mam wycieczkę: %d", rank, zegarLamporta, wycieczka);
         //jesli przyszla wycieczka rob wszystko - wyslij CHCEWEJSC i czekaj na odpowiedzi od innych
         wycieczka = rank % 2;
