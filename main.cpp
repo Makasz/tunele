@@ -10,6 +10,13 @@
 
 #define WEJSCIE 1
 
+typedef struct {
+    int appdata;
+    int inne_pole; 
+    int timestamp;
+    int src; 
+} packet_t;
+
 int losuj(){
     int wycieczka = rand()%100;
     if (wycieczka > 10)
