@@ -63,7 +63,7 @@ int max(int a, int b)
 void *znajdz_wycieczke(void* wyc_a) {
     int wyc = *((int *)(&wyc_a));
     if(wyc == 0){
-        *wyc_a = (void*)losuj();
+        wyc_a = (void*)losuj();
         printf("Wylosowałem %d\n", *((int *)wyc_a));
         usleep(5000000);
     }
