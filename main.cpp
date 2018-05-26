@@ -102,7 +102,7 @@ int main(int argc, char* argv[]) {
     while(1) {
         int wycieczka = losuj();
         //jesli przyszla wycieczka rob wszystko - wyslij CHCEWEJSC i czekaj na odpowiedzi od innych
-        wycieczka = rank % 2;
+        wycieczka = rank % 3;
         printf("[%d] [L:%d] Czy mam wycieczkę: %d\n", rank, zegarLamporta, wycieczka);
         if (wycieczka)
         {
@@ -166,7 +166,8 @@ int main(int argc, char* argv[]) {
             printf("[%d] [L:%d] Oczekuję na żądania\n", rank, zegarLamporta);
             for (int i = 0; i < size; i++)
             {   
-                MPI_Recv(rec_pkt, 1, MPI_PAKIET_T, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+                packet_t test;
+                MPI_Recv(&test, 1, MPI_PAKIET_T, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
                 printf("[%d] [L:%d] Otrzymałem żądanie\n", rank, zegarLamporta);
                 //aktualizuj zegarLamporta po Recv
                 zegarLamporta = max(zegarLamporta, rec_pkt->timestamp) + 1;
