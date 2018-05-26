@@ -61,13 +61,16 @@ MPI_Datatype MPI_PAKIET_T;
 
 int main(int argc, char* argv[]) {
     int zegarLamporta = 0;
-    int myid, nodenum, rank, size;
     packet_t *rec_pkt;   //bylo pakiet_t ale zmienilem na packet_t bo chyba bylo zle
     MPI_Status status;
 
-    int provided;
-    MPI_Init_thread(&argc, &argv,MPI_THREAD_MULTIPLE, &provided);
-    check_thread_support(provided);
+    MPI_Init(&argc, &argv);
+    int size,rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+    // int provided;
+    // MPI_Init_thread(&argc, &argv,MPI_THREAD_MULTIPLE, &provided);
+    // check_thread_support(provided);
     // MPI_Init(&argc, &argv);                 //Start MPI
     // MPI_Comm_rank(MPI_COMM_WORLD, &myid);           //get rank of node's process
     // MPI_Comm_size(MPI_COMM_WORLD, &nodenum);
@@ -85,8 +88,8 @@ int main(int argc, char* argv[]) {
     MPI_Type_create_struct(nitems, blocklengths, offsets, typy, &MPI_PAKIET_T);
     MPI_Type_commit(&MPI_PAKIET_T);
 
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    MPI_Comm_size(MPI_COMM_WORLD, &size);
+    // MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    // MPI_Comm_size(MPI_COMM_WORLD, &size);
     printf("2");
     // int kolejka_procesow[size];
     // int czy_odp[size];
