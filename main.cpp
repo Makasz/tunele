@@ -10,6 +10,7 @@
 #define OK 0
 #define CHCEWEJSC 1
 #define WEJSCIE 1
+#define MPI_PAKIET_T int
 
 using namespace std;
 
@@ -81,12 +82,12 @@ int main(int argc, char* argv[]) {
     MPI_Datatype typy[2] = {MPI_INT, MPI_INT};
     MPI_Aint offsets[2];
 
-    printf("0");
-    offsets[0] = offsetof(packet_t, info);
-    offsets[1] = offsetof(packet_t, timestamp);
-    printf("1");
-    MPI_Type_create_struct(nitems, blocklengths, offsets, typy, &MPI_PAKIET_T);
-    MPI_Type_commit(&MPI_PAKIET_T);
+    // printf("0");
+    // offsets[0] = offsetof(packet_t, info);
+    // offsets[1] = offsetof(packet_t, timestamp);
+    // printf("1");
+    // MPI_Type_create_struct(nitems, blocklengths, offsets, typy, &MPI_PAKIET_T);
+    // MPI_Type_commit(&MPI_PAKIET_T);
 
     // MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     // MPI_Comm_size(MPI_COMM_WORLD, &size);
