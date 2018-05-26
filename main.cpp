@@ -101,10 +101,9 @@ int main(int argc, char* argv[]) {
     srand(time(0));
     while(1) {
         int wycieczka = losuj();
-        printf("[%d] [L:%d] Czy mam wycieczkę: %d\n", rank, zegarLamporta, wycieczka);
         //jesli przyszla wycieczka rob wszystko - wyslij CHCEWEJSC i czekaj na odpowiedzi od innych
-
         wycieczka = rank % 2;
+        printf("[%d] [L:%d] Czy mam wycieczkę: %d\n", rank, zegarLamporta, wycieczka);
         if (wycieczka)
         {
             //wyślij wszystkim CHCEWEJSC
