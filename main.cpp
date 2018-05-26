@@ -74,10 +74,10 @@ int main(int argc, char* argv[]) {
             //wyślij wszystkim CHCEWEJSC
             for (int i = 0; i < size; i++)
             {
-            	packet_t *pkt;
+            	packet_t pkt;
                 pkt.info = CHCEWEJSC;
                 pkt.timestamp = zegarLamporta;  //wysylamy nasz zegarLamporta
-            	MPI_Send(pkt, 1, MPI_PAKIET_T, i, WEJSCIE, MPI_COMM_WORLD );
+            	MPI_Send(&pkt, 1, MPI_PAKIET_T, i, WEJSCIE, MPI_COMM_WORLD );
             }
             //inkrementuj zegarLamporta po broadcascie
             zegarLamporta++;
@@ -130,10 +130,10 @@ int main(int argc, char* argv[]) {
                 //jesli otrzymano CHCEWEJSC odeslij OK
                 if(rec_pkt->info == CHCEWEJSC)
                 {
-                    packet_t *pkt;
+                    packet_t pkt;
                     pkt.info = OK;
                     pkt.timestamp = zegarLamporta;
-                    MPI_Send(pkt, 1, MPI_PAKIET_T, status.MPI_SOURCE, WEJSCIE, MPI_COMM_WORLD );
+                    MPI_Send(&pkt, 1, MPI_PAKIET_T, status.MPI_SOURCE, WEJSCIE, MPI_COMM_WORLD );
                     //inkrementuj zegarLamporta po Send
                     zegarLamporta++;
                 }
