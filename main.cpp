@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include "mpi.h"
 #include <math.h>
 #include <random>
@@ -60,7 +61,7 @@ int max(int a, int b)
 }
 
 void *znajdz_wycieczke(void* wyc_a) {
-    int * wyc = (int *)wyc_a;
+    int * wyc = (intptr_t)wyc_a;
     if(*wyc == 0){
         *wyc = losuj();
         printf("Wylosowałem %d\n", (int)wyc_a);
