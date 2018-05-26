@@ -74,7 +74,7 @@ int main(int argc, char* argv[]) {
     // MPI_Init(&argc, &argv);                 //Start MPI
     // MPI_Comm_rank(MPI_COMM_WORLD, &myid);           //get rank of node's process
     // MPI_Comm_size(MPI_COMM_WORLD, &nodenum);
-    printf("-1");
+    printf("-1\n");
     const int nitems=2;
     int blocklengths[2] = {1,1};
     MPI_Datatype typy[2] = {MPI_INT, MPI_INT};
@@ -82,31 +82,32 @@ int main(int argc, char* argv[]) {
 
 
 
-    printf("0");
+    printf("0\n");
     offsets[0] = offsetof(packet_t, info);
     offsets[1] = offsetof(packet_t, timestamp);
-    printf("1");
+    printf("1\n");
     MPI_Type_create_struct(nitems, blocklengths, offsets, typy, &MPI_PAKIET_T);
     MPI_Type_commit(&MPI_PAKIET_T);
-    MPI_Finalize();
-    return 0;
+
     // MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     // MPI_Comm_size(MPI_COMM_WORLD, &size);
-    printf("2");
+    printf("2\n");
     // int kolejka_procesow[size];
     // int czy_odp[size];
     // print()
 
     vector<int> kolejka_procesow;
     vector<int> czy_odp;
-        printf("3");
+        printf("3\n");
     for(int i = 0; i < size; i++)
     {
         kolejka_procesow.push_back(-1);
         czy_odp.push_back(0);
     }
+    MPI_Finalize();
+    return 0;
     srand(time(0));
-        printf("4");
+    printf("4\n");
     while(1) {
         int wycieczka = losuj();
         printf("[%d] [L:%d] Czy mam wycieczkę: %d", rank, zegarLamporta, wycieczka);
