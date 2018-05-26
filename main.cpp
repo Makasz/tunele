@@ -76,7 +76,7 @@ int main(int argc, char* argv[]) {
     MPI_Datatype typy[2] = {MPI_INT, MPI_INT};
     MPI_Aint offsets[2];
 
-    print("0");
+    printf("0");
     offsets[0] = offsetof(packet_t, info);
     offsets[1] = offsetof(packet_t, timestamp);
     printf("1");
