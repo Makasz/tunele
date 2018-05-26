@@ -32,6 +32,8 @@ int max(int a, int b)
     else  return b;
 }
 
+MPI_Datatype MPI_PAKIET_T;
+
 int main(int argc, char* argv[]) {
     int zegarLamporta = 0;
     int myid, nodenum, rank, size;
@@ -50,7 +52,7 @@ int main(int argc, char* argv[]) {
     offsets[0] = offsetof(packet_t, info);
     offsets[1] = offsetof(packet_t, timestamp);
 
-    MPI_Type_create_struct(nitems, blocklengths, offsets, typy, &packet_t);
+    MPI_Type_create_struct(nitems, blocklengths, offsets, typy, &MPI_PAKIET_T);
     MPI_Type_commit(&MPI_PAKIET_T);
 
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
