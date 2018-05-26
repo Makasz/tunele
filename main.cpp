@@ -60,7 +60,7 @@ int max(int a, int b)
 
 MPI_Datatype MPI_PAKIET_T;
 
-int main(int argc, char* argv[]) {
+int main(int argc, char*** argv) {
     int zegarLamporta = 0;
     int myid, nodenum, rank, size;
     packet_t *rec_pkt;   //bylo pakiet_t ale zmienilem na packet_t bo chyba bylo zle
