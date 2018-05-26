@@ -3,12 +3,13 @@
 #include "mpi.h"
 #include <math.h>
 #include <random>
-#define SEED 35791246
 
+#define SEED 35791246
 #define OK 0
 #define CHCEWEJSC 1
-
 #define WEJSCIE 1
+
+namespace std;
 
 typedef struct {
     int appdata;
@@ -58,12 +59,16 @@ int main(int argc, char* argv[]) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-    int kolejka_procesow[size];
-    int czy_odp[size];
+    // int kolejka_procesow[size];
+    // int czy_odp[size];
+    // print()
+
+    vector<int> kolejka_procesow;
+    vector<int> czy_odp;
     for(int i = 0; i < size; i++)
     {
-        kolejka_procesow[i] = -1;
-        czy_odp[i] = 0;
+        kolejka_procesow.push_back(-1);
+        czy_odp.push_back(0);
     }
     srand(time(0));
     while(1) {
@@ -85,8 +90,8 @@ int main(int argc, char* argv[]) {
             //inkrementuj zegarLamporta po broadcascie
             zegarLamporta++;
             //"odpowiedz" sam do siebie
-            czy_odp[rank] = 1;
-            kolejka_procesow[rank] = zegarLamporta;
+            czy_odp.at(rank) = 1;
+            kolejka_procesow.at(rank) = zegarLamporta;
 
             //czekaj na odpowiedz od wszystkich
             bool end = false;
@@ -100,16 +105,16 @@ int main(int argc, char* argv[]) {
                     zegarLamporta = max(zegarLamporta, rec_pkt->timestamp) + 1;
                     printf("[%d] [L:%d] Otrzymałem wiadomość", rank, zegarLamporta);
                     //oznacz w tablicy czy_odp ze juz przyszla odpowiedz od tego procesu
-                    czy_odp[status.MPI_SOURCE] = 1;
+                    czy_odp.at(status.MPI_SOURCE) = 1;
                     //jesli ok to nie ma problemu
                     if(rec_pkt->info == OK)
                     {
-                        kolejka_procesow[status.MPI_SOURCE] = 0;
+                        kolejka_procesow.at(status.MPI_SOURCE) = 0;
                     }
                     //jesli tez CHCEWEJSC przechowujemy jego timestamp
                     else if(rec_pkt->info == CHCEWEJSC)
                     {
-                        kolejka_procesow[status.MPI_SOURCE] = rec_pkt->timestamp;
+                        kolejka_procesow.at(status.MPI_SOURCE) = rec_pkt->timestamp;
                     }
                     //sprawdzamy czy mamy juz odpowiedz od wszystkich
                     for(int j = 0; j < size; j++)
