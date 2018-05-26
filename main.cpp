@@ -12,7 +12,7 @@
 
 typedef struct {
     int appdata;
-    int inne_pole; 
+    int info; 
     int timestamp;
     int src; 
 } packet_t;
@@ -32,9 +32,9 @@ int max(int a, int b)
     else  return b;
 }
 
-
 int main(int argc, char* argv[]) {
     int zegarLamporta = 0;
+    int myid, nodenum, rank, size;
     packet_t rec_pkt;   //bylo pakiet_t ale zmienilem na packet_t bo chyba bylo zle
     MPI_Status status;
 
@@ -42,8 +42,6 @@ int main(int argc, char* argv[]) {
     MPI_Comm_rank(MPI_COMM_WORLD, &myid);           //get rank of node's process
     MPI_Comm_size(MPI_COMM_WORLD, &nodenum);
 
-
-    int size;
     const int nitems=2;
     int blocklengths[2] = {1,1};
     MPI_Datatype typy[2] = {MPI_INT, MPI_INT};
