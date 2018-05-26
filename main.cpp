@@ -59,7 +59,7 @@ int max(int a, int b)
 }
 
 void *znajdz_wycieczke(void* wyc_a) {
-    int *wyc = (int *)wyc_a
+    int *wyc = (int *)wyc_a;
     if(*wyc == 0){
         wyc = losuj();
         usleep(5000000);
@@ -109,7 +109,7 @@ int main(int argc, char* argv[]) {
     }
     srand(time(0));
 
-    pthread_t thread_id;
+    pthread_t* thread_id;
     int rc;
     rc = pthread_create(thread_id, NULL, znajdz_wycieczke, (void *)&wycieczka);
 
