@@ -77,7 +77,7 @@ int main(int argc, char* argv[]) {
             	packet_t pkt;
                 pkt.info = CHCEWEJSC;
                 pkt.timestamp = zegarLamporta;  //wysylamy nasz zegarLamporta
-                printf("[%d] [L:%d] Wysyałam wiadomość: CHCEWEJSC", rank, zegarLamporta)
+                printf("[%d] [L:%d] Wysyałam wiadomość: CHCEWEJSC", rank, zegarLamporta);
             	MPI_Send(&pkt, 1, MPI_PAKIET_T, i, WEJSCIE, MPI_COMM_WORLD );
             }
             //inkrementuj zegarLamporta po broadcascie
@@ -96,7 +96,7 @@ int main(int argc, char* argv[]) {
                     MPI_Recv( &rec_pkt, 1, MPI_PAKIET_T, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
                     //aktualizuj zegarLamporta po Recv
                     zegarLamporta = max(zegarLamporta, rec_pkt->timestamp) + 1;
-                    printf("[%d] [L:%d] Otrzymałem wiadomość", rank, zegarLamporta)
+                    printf("[%d] [L:%d] Otrzymałem wiadomość", rank, zegarLamporta);
                     //oznacz w tablicy czy_odp ze juz przyszla odpowiedz od tego procesu
                     czy_odp[status.MPI_SOURCE] = 1;
                     //jesli ok to nie ma problemu
