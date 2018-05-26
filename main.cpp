@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
     MPI_Comm_size(MPI_COMM_WORLD, &nodenum);
 
 
-
+    int size;
     const int nitems=2;
     int blocklengths[2] = {1,1};
     MPI_Datatype typy[2] = {MPI_INT, MPI_INT};
