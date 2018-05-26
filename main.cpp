@@ -80,25 +80,19 @@ int main(int argc, char* argv[]) {
     MPI_Datatype typy[2] = {MPI_INT, MPI_INT};
     MPI_Aint offsets[2];
 
-
-
-    printf("0\n");
     offsets[0] = offsetof(packet_t, info);
     offsets[1] = offsetof(packet_t, timestamp);
-    printf("1\n");
     MPI_Type_create_struct(nitems, blocklengths, offsets, typy, &MPI_PAKIET_T);
     MPI_Type_commit(&MPI_PAKIET_T);
 
     // MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     // MPI_Comm_size(MPI_COMM_WORLD, &size);
-    printf("2\n");
     // int kolejka_procesow[size];
     // int czy_odp[size];
     // print()
 
     vector<int> kolejka_procesow;
     vector<int> czy_odp;
-        printf("3\n");
     for(int i = 0; i < size; i++)
     {
         kolejka_procesow.push_back(-1);
@@ -106,7 +100,6 @@ int main(int argc, char* argv[]) {
     }
     
     srand(time(0));
-    printf("4\n");
     while(1) {
         int wycieczka = losuj();
         printf("[%d] [L:%d] Czy mam wycieczkę: %d\n", rank, zegarLamporta, wycieczka);
@@ -121,7 +114,7 @@ int main(int argc, char* argv[]) {
             	packet_t pkt;
                 pkt.info = CHCEWEJSC;
                 pkt.timestamp = zegarLamporta;  //wysylamy nasz zegarLamporta
-                printf("[%d] [L:%d] Wysyałam wiadomość: CHCEWEJSC do i\n", rank, zegarLamporta);
+                printf("[%d] [L:%d] Wysyałam wiadomość: CHCEWEJSC do %d\n", rank, zegarLamporta, i);
             	MPI_Send(&pkt, 1, MPI_PAKIET_T, i, WEJSCIE, MPI_COMM_WORLD);
             }
             //inkrementuj zegarLamporta po broadcascie
