@@ -109,11 +109,13 @@ int main(int argc, char* argv[]) {
             //wyślij wszystkim CHCEWEJSC
             for (int i = 0; i < size; i++)
             {
-            	packet_t pkt;
-                pkt.info = CHCEWEJSC;
-                pkt.timestamp = zegarLamporta;  //wysylamy nasz zegarLamporta
-                printf("[%d] [L:%d] Wysyałam wiadomość: CHCEWEJSC do %d\n", rank, zegarLamporta, i);
-            	MPI_Send(&pkt, 1, MPI_PAKIET_T, i, WEJSCIE, MPI_COMM_WORLD);
+                if (i != rank) {
+                    packet_t pkt;
+                    pkt.info = CHCEWEJSC;
+                    pkt.timestamp = zegarLamporta;  //wysylamy nasz zegarLamporta
+                    printf("[%d] [L:%d] Wysyałam wiadomość: CHCEWEJSC do %d\n", rank, zegarLamporta, i);
+                    MPI_Send(&pkt, 1, MPI_PAKIET_T, i, WEJSCIE, MPI_COMM_WORLD);
+                }
             }
             //inkrementuj zegarLamporta po broadcascie
             zegarLamporta++;
