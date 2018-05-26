@@ -62,12 +62,13 @@ int max(int a, int b)
 
 void *znajdz_wycieczke(void* wyc_a) {
     int wyc = *((int *)(&wyc_a));
-    if(wyc == 0){
-        int loc = losuj();
-        wyc_a = (void*)&loc;
-        printf("Wylosowałem %d\n", *((int *)wyc_a));
-        usleep(5000000);
-    }
+    // if(wyc == 0){
+
+    //     int loc = losuj();
+    //     wyc_a = (void*)&loc;
+    //     printf("Wylosowałem %d\n", *((int *)wyc_a));
+    //     usleep(5000000);
+    // }
 }
 
 MPI_Datatype MPI_PAKIET_T;
