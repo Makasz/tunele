@@ -44,11 +44,11 @@ void check_thread_support(int provided)
 
 int losuj(){
     int wycieczka = rand() % 10;
-    if (wycieczka = 1)
+    if (wycieczka == 1)
     {
-        wycieczka = 0;
+        return 1;
     }
-    return wycieczka;
+    return 0;
 }
 
 int max(int a, int b)
@@ -109,11 +109,9 @@ int main(int argc, char* argv[]) {
     printf("4\n");
     while(1) {
         int wycieczka = losuj();
-        usleep(1000000);
         printf("[%d] [L:%d] Czy mam wycieczkę: %d\n", rank, zegarLamporta, wycieczka);
         //jesli przyszla wycieczka rob wszystko - wyslij CHCEWEJSC i czekaj na odpowiedzi od innych
-        wycieczka = rank % 2;
-        if (wycieczka > 0)
+        if (wycieczka)
         {
             //wyślij wszystkim CHCEWEJSC
             for (int i = 0; i < size; i++)
@@ -122,7 +120,7 @@ int main(int argc, char* argv[]) {
                 pkt.info = CHCEWEJSC;
                 pkt.timestamp = zegarLamporta;  //wysylamy nasz zegarLamporta
                 printf("[%d] [L:%d] Wysyałam wiadomość: CHCEWEJSC\n", rank, zegarLamporta);
-            	MPI_Send(&pkt, 1, MPI_PAKIET_T, i, WEJSCIE, MPI_COMM_WORLD );
+            	MPI_Send(&pkt, 1, MPI_PAKIET_T, i, WEJSCIE, MPI_COMM_WORLD);
             }
             //inkrementuj zegarLamporta po broadcascie
             zegarLamporta++;
