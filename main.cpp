@@ -62,8 +62,8 @@ void *znajdz_wycieczke(void* wyc_a) {
     int *wyc = (int *)wyc_a;
     if(*wyc == 0){
         int los = losuj();
-        wyc_a = (void*)los;
-        printf("Wylosowałem %d\n", (int)*wyc_a);
+        wyc_a = (void*)&los;
+        printf("Wylosowałem %d\n", (int)wyc_a);
         usleep(5000000);
     }
 }
