@@ -168,9 +168,8 @@ int main(int argc, char* argv[]) {
             printf("[%d] [L:%d] Oczekuję na żądania\n", rank, zegarLamporta);
             for (int i = 0; i < size; i++)
             {   
-                packet_t test;
-                MPI_Recv(&test, 1, MPI_PAKIET_T, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
-                printf("[%d] [L:%d] Otrzymałem żądanie dd [%d]\n", rank, zegarLamporta, status.MPI_SOURCE);
+                MPI_Recv(rec_pkt, 1, MPI_PAKIET_T, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+                printf("[%d] [L:%d] Otrzymałem żądanie od [%d] [L:%d]\n", rank, zegarLamporta, status.MPI_SOURCE, rec_pkt->timestamp);
                 //aktualizuj zegarLamporta po Recv
                 zegarLamporta = max(zegarLamporta, rec_pkt->timestamp) + 1;
                 //jesli otrzymano CHCEWEJSC odeslij OK
