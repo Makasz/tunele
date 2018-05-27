@@ -38,7 +38,7 @@ int max(int a, int b)
     else  return b;
 }
 
-void znajdz_wycieczke(int* wyc_a, int rank) {
+void znajdz_wycieczke(int* wyc_a, int rank, MPI_Datatype MPI_PAKIET_T) {
     while(1) {
         if(*wyc_a == 0){
             int loc = losuj();
@@ -48,8 +48,8 @@ void znajdz_wycieczke(int* wyc_a, int rank) {
             if(*wyc_a == 1){
                 packet_t wyceczka_pkt;
                 //Wyślij informację samemu sobie, że otrzymałeś wycieczkę
-                pkt.info = WYCIECZKA;
-                pkt.timestamp = zegarLamporta;
+                wyceczka_pkt.info = WYCIECZKA;
+                wyceczka_pkt.timestamp = -1;
                 MPI_Send(&wyceczka_pkt, 1, MPI_PAKIET_T, rank, WYCIECZKA, MPI_COMM_WORLD );
             }
         }
@@ -60,6 +60,7 @@ MPI_Datatype MPI_PAKIET_T;
 
 int main(int argc, char* argv[]) {
     int zegarLamporta = 0;
+    int wycieczka = 0;
     packet_t *rec_pkt;   //bylo pakiet_t ale zmienilem na packet_t bo chyba bylo zle
     MPI_Status status;
 
@@ -88,7 +89,7 @@ int main(int argc, char* argv[]) {
     
     srand(time(0) + rank);
     printf("Starting thread!\n");
-    thread losowanie(znajdz_wycieczke, &wycieczka, rank);
+    thread losowanie(znajdz_wycieczke, &wycieczka, rank, MPI_PAKIET_T);
     printf("Thread started!\n");
     while(1) {
         //jesli przyszla wycieczka rob wszystko - wyslij CHCEWEJSC i czekaj na odpowiedzi od innych
