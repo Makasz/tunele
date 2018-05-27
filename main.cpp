@@ -118,7 +118,7 @@ int main(int argc, char* argv[]) {
     
     vector<int> randomvec = {-1, 2, 4, -1};
     randomvec = sortowanie(randomvec);
-    for(int i = 0; i<4, i++){
+    for(int i = 0; i<4; i++){
         printf("%d ", randomvec[i]);
     }
     
