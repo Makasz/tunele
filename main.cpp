@@ -195,6 +195,7 @@ int main(int argc, char* argv[]) {
                         for(int i = 0; i < posortowane.size(); i++){
                             if(kolejka_procesow[posortowane[i]] == -1) continue;
                             //Sprwadzamy czy jest miejsce w podprzestrzeni
+                             printf("[%d] [L:%d] Proces [%d] jest %d w kolejce (%d osob)\n", rank, zegarLamporta, posortowane[i], i, liczba_ludzi[posortowane[i]]);
                             if(ludzie_w_podprzestrzeni + liczba_ludzi[posortowane[i]] <= rozmiar_podprzestrzeni){
                                 ludzie_w_podprzestrzeni += liczba_ludzi[posortowane[i]];
                                 //Jeśli jest nasza kolej to wysyłamy
