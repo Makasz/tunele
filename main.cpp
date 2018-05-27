@@ -7,6 +7,7 @@
 #include <vector>
 #include <unistd.h>
 #include <thread>
+#include <algorithm>
 
 #define SEED 35791246
 #define OK 0
@@ -58,6 +59,16 @@ void znajdz_wycieczke(int* wyc_a, int rank, MPI_Datatype MPI_PAKIET_T) {
         }
     }
 }
+
+vector<int> sortowanie2(vector<int> kolejka) {
+    vector<int> nowy;
+    while(!kolejka.empty()){
+        vector<int>::iterator result = min_element(begin(kolejka), end(kolejka));
+        nowy.push_back(distance(begin(kolejka), result));
+        kolejka.erase(distance(begin(kolejka), result));
+    }
+    return nowy;
+};
 
 vector<int> sortowanie(vector<int> kolejka) {
     vector<int> nowy;
@@ -117,7 +128,7 @@ int main(int argc, char* argv[]) {
     }
     
     vector<int> randomvec = {-1, 2, 4, -1};
-    randomvec = sortowanie(randomvec);
+    randomvec = sortowanie2(randomvec);
     for(int i = 0; i<4; i++){
         printf("%d ", randomvec[i]);
     }
