@@ -200,7 +200,8 @@ int main(int argc, char* argv[]) {
                                 //Jeśli jest nasza kolej to wysyłamy
                                 if(posortowane[i] == rank){
                                     printf("[%d] [L:%d] Przesyłam wycieczkę! \n", rank, zegarLamporta);
-                                    usleep(2000000); //Czas trwania podróży
+                                    usleep(5000000); //Czas trwania podróży
+                                    ludzie_w_podprzestrzeni -= liczba_ludzi[posortowane[i]];
                                     //Wysyłamy innym, że skończyliśmy
                                     for (int i = 0; i < size; i++)
                                         {
@@ -263,6 +264,7 @@ int main(int argc, char* argv[]) {
                 if(test.info == SKONCZYLEM)
                 {
                     printf("[%d] [L:%d] Otrzymałem wiadomość, że proces [%d] skonczyl wycieczke (%d ludzi)\n", rank, zegarLamporta, status.MPI_SOURCE, test.ludzie);
+                    ludzie_w_podprzestrzeni -= test.ludzie;
                     liczba_ludzi[status.MPI_SOURCE] = 0;
                     kolejka_procesow.at(status.MPI_SOURCE) = -1;
                     break;
