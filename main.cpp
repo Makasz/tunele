@@ -110,7 +110,7 @@ int main(int argc, char* argv[]) {
                     packet_t pkt;
                     pkt.info = CHCEWEJSC;
                     pkt.timestamp = zegarLamporta;  //wysylamy nasz zegarLamporta
-                    pkt.timestamp = zegarLamporta;
+                    pkt.ludzie = liczba_ludzi[rank];
                     printf("[%d] [L:%d] Wysyałam wiadomość: CHCEWEJSC do %d\n", rank, zegarLamporta, i);
                     MPI_Send(&pkt, 1, MPI_PAKIET_T, i, WEJSCIE, MPI_COMM_WORLD);
                 }
@@ -171,7 +171,7 @@ int main(int argc, char* argv[]) {
                                 packet_t pkt;
                                 pkt.info = SKONCZYLEM;
                                 pkt.timestamp = zegarLamporta;  //wysylamy nasz zegarLamporta
-                                pkt.liczba_ludzi = ludzie[rank];
+                                pkt.ludzie = liczba_ludzi[rank];
                                 printf("[%d] [L:%d] Wysyałam wiadomość: SKONCZYLEM do %d\n", rank, zegarLamporta, i);
                                 MPI_Send(&pkt, 1, MPI_PAKIET_T, i, WEJSCIE, MPI_COMM_WORLD);
                             }
@@ -201,7 +201,7 @@ int main(int argc, char* argv[]) {
                     packet_t pkt;
                     pkt.info = OK;
                     pkt.timestamp = zegarLamporta;
-                    pkt.liczba_ludzi = 0;
+                    pkt.ludzie = 0;
                     printf("[%d] [L:%d] Odpowiadam na żądanie wejścia\n", rank, zegarLamporta);
                     MPI_Send(&pkt, 1, MPI_PAKIET_T, status.MPI_SOURCE, WEJSCIE, MPI_COMM_WORLD );
                     //inkrementuj zegarLamporta po Send
@@ -211,7 +211,7 @@ int main(int argc, char* argv[]) {
                 {
                     printf("[%d] [L:%d] Otrzymałem wycieczkę\n", rank, zegarLamporta);
                     wycieczka = 1;
-                    ludzie[rank] = test.liczba_ludzi;
+                    liczba_ludzi[rank] = test.ludzie;
                     break;
                 }
                 if(test.info == SKONCZYLEM)
