@@ -94,7 +94,7 @@ int main(int argc, char* argv[]) {
     while(1) {
         //jesli przyszla wycieczka rob wszystko - wyslij CHCEWEJSC i czekaj na odpowiedzi od innych
         printf("[%d] [L:%d] Czy mam wycieczkę: %d\n", rank, zegarLamporta, wycieczka);
-        if (wycieczka)
+        if (wycieczka > 0)
         {
             wycieczka = 0;
             //wyślij wszystkim CHCEWEJSC
@@ -186,6 +186,7 @@ int main(int argc, char* argv[]) {
                 if(test.info == WYCIECZKA)
                 {
                     printf("[%d] [L:%d] Otrzymałem wycieczkę\n", rank, zegarLamporta);
+                    wycieczka = 1;
                     break;
                 }
             }
