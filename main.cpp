@@ -142,16 +142,19 @@ int main(int argc, char* argv[]) {
                         //Narazie wystarczy, że dostaniemy odpowiedź od każdego żeby wysłać wycieczkę
                     }
                     //sprawdzamy czy mamy juz odpowiedz od wszystkich
+                    int flag_odp = 1;
                     for(int j = 0; j < size; j++)
                     {
                         if(czy_odp[j] == 0 )
                         {
+                            flag_odp = 0;
                             break;
                         }
+                    }
+                    if(flag_odp == 1){
                         end = true;
                         printf("[%d] [L:%d] Przesyłam wycieczkę! \n", rank, zegarLamporta);
                         //usleep(2000000);
-                        break;
                     }
                 //}
             }
