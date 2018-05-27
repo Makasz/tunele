@@ -211,9 +211,11 @@ int main(int argc, char* argv[]) {
                                             pkt.timestamp = zegarLamporta;  //wysylamy nasz zegarLamporta
                                             pkt.ludzie = liczba_ludzi[rank];
                                             printf("[%d] [L:%d] Wysyałam wiadomość: SKONCZYLEM do %d\n", rank, zegarLamporta, i);
-                                            MPI_Send(&pkt, 1, MPI_PAKIET_T, i, WEJSCIE, MPI_COMM_WORLD);
+                                            MPI_Send(&pkt, 1, MPI_PAKIET_T, i, WEJSCIE, MPI_COMM_WORLD);           
                                         }
                                     }
+                                    liczba_ludzi[rank] = 0;
+                                    kolejka_procesow.at(rank) = -1;
                                     wycieczka = 0;
                                 }
                             } else {
