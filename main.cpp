@@ -5,6 +5,7 @@
 #include <math.h>
 #include <random>
 #include <vector>
+#include <map>
 #include <unistd.h>
 #include <thread>
 #include <algorithm>
@@ -60,40 +61,6 @@ void znajdz_wycieczke(int* wyc_a, int rank, MPI_Datatype MPI_PAKIET_T) {
     }
 }
 
-vector<int> sortowanie2(vector<int> kolejka) {
-    vector<int> nowy;
-    int i = 0;
-    int size = kolejka.size();
-    while(!kolejka.empty()){
-        vector<int>::iterator result = min_element(begin(kolejka), end(kolejka));
-        nowy.push_back((int)distance(begin(kolejka), result) + (size - kolejka.size()));
-        kolejka.erase(result);
-        printf("SIZE: %d\n", kolejka.size());
-    }
-    return nowy;
-};
-
-vector<int> sortowanie(vector<int> kolejka) {
-    vector<int> nowy;
-    int tmp = 0;
-    for(int j = 0; j < kolejka.size(); j++){
-        for (int i = 0; i < kolejka.size(); i++){
-            tmp = 0;
-            if(kolejka[tmp] == -1)
-            {
-                tmp++;
-            }
-        }
-        int i = 0;
-        for(i = 0; i < kolejka.size(); i++){
-            if(kolejka[i] < kolejka[tmp] && kolejka[i] != -1){
-                tmp = i;
-            }
-        }
-        kolejka.erase(kolejka.begin() + i);
-        nowy.push_back(tmp);
-    }
-};
 
 MPI_Datatype MPI_PAKIET_T;
 
