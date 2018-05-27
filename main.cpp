@@ -44,7 +44,6 @@ void znajdz_wycieczke(int* wyc_a, int rank, MPI_Datatype MPI_PAKIET_T) {
             int loc = losuj();
             wyc_a = &loc;
             printf("[%d] Wylosowałem %d\n",rank, *wyc_a);
-            usleep(5000000);
             if(*wyc_a == 1){
                 packet_t wyceczka_pkt;
                 //Wyślij informację samemu sobie, że otrzymałeś wycieczkę
@@ -52,6 +51,7 @@ void znajdz_wycieczke(int* wyc_a, int rank, MPI_Datatype MPI_PAKIET_T) {
                 wyceczka_pkt.timestamp = -1;
                 MPI_Send(&wyceczka_pkt, 1, MPI_PAKIET_T, rank, WYCIECZKA, MPI_COMM_WORLD );
             }
+            usleep(5000000);
         }
     }
 }
