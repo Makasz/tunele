@@ -130,7 +130,7 @@ int main(int argc, char* argv[]) {
         printf("[%d] [L:%d] Czy mam wycieczkę: %d\n", rank, zegarLamporta, wycieczka);
         if (wycieczka > 0)
         {
-            wycieczka = 0;
+            
             //wyślij wszystkim CHCEWEJSC
             for (int i = 0; i < size; i++)
             {
@@ -204,17 +204,17 @@ int main(int argc, char* argv[]) {
                                     usleep(5000000); //Czas trwania podróży
                                     ludzie_w_podprzestrzeni -= liczba_ludzi[posortowane[i]];
                                     //Wysyłamy innym, że skończyliśmy
-                                    for (int i = 0; i < size; i++)
-                                        {
-                                            if (i != rank) {
-                                                packet_t pkt;
-                                                pkt.info = SKONCZYLEM;
-                                                pkt.timestamp = zegarLamporta;  //wysylamy nasz zegarLamporta
-                                                pkt.ludzie = liczba_ludzi[rank];
-                                                printf("[%d] [L:%d] Wysyałam wiadomość: SKONCZYLEM do %d\n", rank, zegarLamporta, i);
-                                                MPI_Send(&pkt, 1, MPI_PAKIET_T, i, WEJSCIE, MPI_COMM_WORLD);
-                                            }
+                                    for (int i = 0; i < size; i++){
+                                        if (i != rank) {
+                                            packet_t pkt;
+                                            pkt.info = SKONCZYLEM;
+                                            pkt.timestamp = zegarLamporta;  //wysylamy nasz zegarLamporta
+                                            pkt.ludzie = liczba_ludzi[rank];
+                                            printf("[%d] [L:%d] Wysyałam wiadomość: SKONCZYLEM do %d\n", rank, zegarLamporta, i);
+                                            MPI_Send(&pkt, 1, MPI_PAKIET_T, i, WEJSCIE, MPI_COMM_WORLD);
                                         }
+                                    }
+                                    wycieczka = 0;
                                 }
                             } else {
                                 break;
