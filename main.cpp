@@ -126,7 +126,7 @@ int main(int argc, char* argv[]) {
                     MPI_Recv(&allow_packet, 1, MPI_PAKIET_T, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
                     //aktualizuj zegarLamporta po Recv
                     zegarLamporta = max(zegarLamporta, allow_packet.timestamp) + 1;
-                    printf("[%d] [L:%d] Otrzymałem wiadomość żę mogę wejść\n", rank, zegarLamporta);
+                    printf("[%d] [L:%d] Otrzymałem wiadomość żę mogę wejść od [%d]\n", rank, zegarLamporta, status.MPI_SOURCE);
                     //oznacz w tablicy czy_odp ze juz przyszla odpowiedz od tego procesu
                     czy_odp.at(status.MPI_SOURCE) = 1;
                     //jesli ok to nie ma problemu
