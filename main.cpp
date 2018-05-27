@@ -68,7 +68,7 @@ vector<int> sortowanie2(vector<int> kolejka) {
         vector<int>::iterator result = min_element(begin(kolejka), end(kolejka));
         nowy.push_back((int)distance(begin(kolejka), result) + (size - kolejka.size()));
         kolejka.erase(result);
-        i++;
+        printf("SIZE: %d\n", kolejka.size());
     }
     return nowy;
 };
