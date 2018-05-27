@@ -149,7 +149,7 @@ int main(int argc, char* argv[]) {
                         }
                         end = true;
                         printf("[%d] [L:%d] Przesyłam wycieczkę! \n", rank, zegarLamporta);
-                        usleep(2000000);
+                        //usleep(2000000);
                         break;
                     }
                 //}
