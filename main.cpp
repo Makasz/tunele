@@ -90,7 +90,7 @@ MPI_Datatype MPI_PAKIET_T;
 
 int main(int argc, char* argv[]) {
     int zegarLamporta = 0;
-    int wycieczka = 0;
+
     int rozmiar_podprzestrzeni = 10;
     int ludzie_w_podprzestrzeni = 0;
     packet_t *rec_pkt;   //bylo pakiet_t ale zmienilem na packet_t bo chyba bylo zle
@@ -111,7 +111,7 @@ int main(int argc, char* argv[]) {
     offsets[2] = offsetof(packet_t, ludzie);
     MPI_Type_create_struct(nitems, blocklengths, offsets, typy, &MPI_PAKIET_T);
     MPI_Type_commit(&MPI_PAKIET_T);
-
+    int wycieczka = 0;
     vector<int> kolejka_procesow;
     vector<int> czy_odp;
     vector<int> liczba_ludzi;
