@@ -251,7 +251,7 @@ int main(int argc, char* argv[]) {
                     packet_t pkt;
                     pkt.info = OK;
                     pkt.timestamp = zegarLamporta;
-                    pkt.ludzie = 0;
+                    pkt.ludzie = 15;
                     printf("[%d] [L:%d] Odpowiadam na żądanie wejścia\n", rank, zegarLamporta);
                     MPI_Send(&pkt, 1, MPI_PAKIET_T, status.MPI_SOURCE, WEJSCIE, MPI_COMM_WORLD );
                     //inkrementuj zegarLamporta po Send
