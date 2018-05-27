@@ -50,7 +50,7 @@ void znajdz_wycieczke(int* wyc_a, int rank, MPI_Datatype MPI_PAKIET_T) {
                 //Wyślij informację samemu sobie, że otrzymałeś wycieczkę
                 wyceczka_pkt.info = WYCIECZKA;
                 wyceczka_pkt.timestamp = -1;
-                wyceczka_pkt.liczba_ludzi = rand() % 10 + 1;
+                wyceczka_pkt.ludzie = rand() % 10 + 1;
                 MPI_Send(&wyceczka_pkt, 1, MPI_PAKIET_T, rank, WYCIECZKA, MPI_COMM_WORLD );
                 *wyc_a = 0;
             }
@@ -217,8 +217,8 @@ int main(int argc, char* argv[]) {
                 }
                 if(test.info == SKONCZYLEM)
                 {
-                    printf("[%d] [L:%d] Otrzymałem wiadomość, że proces [%d] skonczyl wycieczke (%d ludzi)\n", rank, zegarLamporta, status.MPI_SOURCE, test.liczba_ludzi);
-                    ludzie[status.MPI_SOURCE] = 0;
+                    printf("[%d] [L:%d] Otrzymałem wiadomość, że proces [%d] skonczyl wycieczke (%d ludzi)\n", rank, zegarLamporta, status.MPI_SOURCE, test.ludzie);
+                    liczba_ludzi[status.MPI_SOURCE] = 0;
                     kolejka_procesow.at(status.MPI_SOURCE) = -1;
                     break;
                 }
