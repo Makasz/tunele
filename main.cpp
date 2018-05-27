@@ -43,7 +43,7 @@ void znajdz_wycieczke(int* wyc_a, int rank, MPI_Datatype MPI_PAKIET_T) {
         if(*wyc_a == 0){
             int loc = losuj();
             wyc_a = &loc;
-            printf("Wylosowałem %d\n", *wyc_a);
+            printf("[%d] Wylosowałem %d\n",rank, *wyc_a);
             usleep(5000000);
             if(*wyc_a == 1){
                 packet_t wyceczka_pkt;
