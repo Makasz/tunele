@@ -39,17 +39,19 @@ int max(int a, int b)
 }
 
 void znajdz_wycieczke(int* wyc_a, int rank, MPI_Datatype MPI_PAKIET_T) {
+    int wyc = *wyc_a;
     while(1) {
-        if(*wyc_a == 0){
+        if(wyc == 0){
             int loc = losuj();
             wyc_a = &loc;
             printf("[%d] Wylosowałem %d\n",rank, *wyc_a);
-            if(*wyc_a == 1){
+            if(wyc == 1){
                 packet_t wyceczka_pkt;
                 //Wyślij informację samemu sobie, że otrzymałeś wycieczkę
                 wyceczka_pkt.info = WYCIECZKA;
                 wyceczka_pkt.timestamp = -1;
                 MPI_Send(&wyceczka_pkt, 1, MPI_PAKIET_T, rank, WYCIECZKA, MPI_COMM_WORLD );
+                wyc = 0;
             }
             usleep(5000000);
         }
