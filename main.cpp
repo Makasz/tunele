@@ -56,7 +56,7 @@ void znajdz_wycieczke(int* wyc_a, int rank, MPI_Datatype MPI_PAKIET_T) {
                 MPI_Send(&wyceczka_pkt, 1, MPI_PAKIET_T, rank, WYCIECZKA, MPI_COMM_WORLD );
                 *wyc_a = 0;
             }
-            usleep(1000000);
+            usleep(2000000);
         }
     }
 }
