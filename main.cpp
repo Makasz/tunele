@@ -59,6 +59,27 @@ void znajdz_wycieczke(int* wyc_a, int rank, MPI_Datatype MPI_PAKIET_T) {
     }
 }
 
+vector<int> sortowanie(vector<int> kolejka) {
+    vector<int> nowy;
+    for(int j = 0; j < kolejka.size(); j++){
+        for (int i = 0; i < kolejka.size(); i++){
+            int tmp = 0;
+            if(kolejka[tmp] == -1)
+            {
+                tmp++;
+            }
+        }
+        int i = 0;
+        for(i = 0; i < kolejka.size(); i++){
+            if(kolejka[i] < kolejka[tmp] && kolejka[i] != -1){
+                tmp = i;
+            }
+        }
+        kolejka.erase(kolejka.begin() + i);
+        nowy.push_back(tmp);
+    }
+};
+
 MPI_Datatype MPI_PAKIET_T;
 
 int main(int argc, char* argv[]) {
@@ -94,6 +115,16 @@ int main(int argc, char* argv[]) {
         liczba_ludzi.push_back(0);
     }
     
+    vector<int> randomvec = {-1, 2, 4, -1};
+    randomvec = sortowanie(randomvec);
+    for(int i = 0; i<4, i++){
+        printf("%d ", randomvec[i]);
+    }
+    
+
+
+
+
     srand(time(0) + rank);
     printf("Starting thread!\n");
     thread losowanie(znajdz_wycieczke, &wycieczka, rank, MPI_PAKIET_T);
@@ -161,10 +192,14 @@ int main(int argc, char* argv[]) {
                     if(flag_odp == 1){
                         end = true;
                         printf("[%d] [L:%d] Przesyłam wycieczkę! \n", rank, zegarLamporta);
+                        //Zerujemy tablice czy inni nam odpowiedzieli
                         for(int j = 0; j < size; j++){
                             czy_odp[j] = 0;
                         }
-                        usleep(2000000);
+
+
+
+                        usleep(2000000); //Czas trwania podróży
                         //Wysyłam do wszytkich, że zakończyłem wycieczke (Zwalniam zasoby)
                         for (int i = 0; i < size; i++)
                         {
