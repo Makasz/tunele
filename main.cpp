@@ -20,6 +20,7 @@ using namespace std;
 typedef struct {
     int info; 
     int timestamp;
+    int ludzie;
 } packet_t;
 
 
