@@ -13,7 +13,7 @@
 #define CHCEWEJSC 1
 #define WEJSCIE 1
 #define WYCIECZKA 2
-
+#define SKONCZYLEM 3
 
 using namespace std;
 
@@ -49,6 +49,7 @@ void znajdz_wycieczke(int* wyc_a, int rank, MPI_Datatype MPI_PAKIET_T) {
                 //Wyślij informację samemu sobie, że otrzymałeś wycieczkę
                 wyceczka_pkt.info = WYCIECZKA;
                 wyceczka_pkt.timestamp = -1;
+                wyceczka_pkt.liczba_ludzi = rand() % 10 + 1;
                 MPI_Send(&wyceczka_pkt, 1, MPI_PAKIET_T, rank, WYCIECZKA, MPI_COMM_WORLD );
                 *wyc_a = 0;
             }
@@ -62,6 +63,7 @@ MPI_Datatype MPI_PAKIET_T;
 int main(int argc, char* argv[]) {
     int zegarLamporta = 0;
     int wycieczka = 0;
+    int rozmiar_podprzestrzeni = 10;
     packet_t *rec_pkt;   //bylo pakiet_t ale zmienilem na packet_t bo chyba bylo zle
     MPI_Status status;
 
@@ -70,22 +72,25 @@ int main(int argc, char* argv[]) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-    const int nitems=2;
-    int blocklengths[2] = {1,1};
-    MPI_Datatype typy[2] = {MPI_INT, MPI_INT};
-    MPI_Aint offsets[2];
+    const int nitems=3;
+    int blocklengths[3] = {1,1,1};
+    MPI_Datatype typy[3] = {MPI_INT, MPI_INT, MPI_INT};
+    MPI_Aint offsets[3];
 
     offsets[0] = offsetof(packet_t, info);
     offsets[1] = offsetof(packet_t, timestamp);
+    offsets[2] = offsetof(packet_t, ludzie);
     MPI_Type_create_struct(nitems, blocklengths, offsets, typy, &MPI_PAKIET_T);
     MPI_Type_commit(&MPI_PAKIET_T);
 
     vector<int> kolejka_procesow;
     vector<int> czy_odp;
+    vector<int> liczba_ludzi;
     for(int i = 0; i < size; i++)
     {
         kolejka_procesow.push_back(-1);
         czy_odp.push_back(0);
+        liczba_ludzi.push_back(0);
     }
     
     srand(time(0) + rank);
@@ -105,6 +110,7 @@ int main(int argc, char* argv[]) {
                     packet_t pkt;
                     pkt.info = CHCEWEJSC;
                     pkt.timestamp = zegarLamporta;  //wysylamy nasz zegarLamporta
+                    pkt.timestamp = zegarLamporta;
                     printf("[%d] [L:%d] Wysyałam wiadomość: CHCEWEJSC do %d\n", rank, zegarLamporta, i);
                     MPI_Send(&pkt, 1, MPI_PAKIET_T, i, WEJSCIE, MPI_COMM_WORLD);
                 }
@@ -154,7 +160,23 @@ int main(int argc, char* argv[]) {
                     if(flag_odp == 1){
                         end = true;
                         printf("[%d] [L:%d] Przesyłam wycieczkę! \n", rank, zegarLamporta);
-                        //usleep(2000000);
+                        for(int j = 0; j < size; j++){
+                            czy_odp[j] = 0;
+                        }
+                        usleep(2000000);
+                        //Wysyłam do wszytkich, że zakończyłem wycieczke (Zwalniam zasoby)
+                        for (int i = 0; i < size; i++)
+                        {
+                            if (i != rank) {
+                                packet_t pkt;
+                                pkt.info = SKONCZYLEM;
+                                pkt.timestamp = zegarLamporta;  //wysylamy nasz zegarLamporta
+                                pkt.liczba_ludzi = ludzie[rank];
+                                printf("[%d] [L:%d] Wysyałam wiadomość: SKONCZYLEM do %d\n", rank, zegarLamporta, i);
+                                MPI_Send(&pkt, 1, MPI_PAKIET_T, i, WEJSCIE, MPI_COMM_WORLD);
+                            }
+                        }
+                        zegarLamporta++;
                     }
                 //}
             }
@@ -176,13 +198,10 @@ int main(int argc, char* argv[]) {
                 {
                     kolejka_procesow.at(status.MPI_SOURCE) = test.timestamp;
                     //Sprawdz kto ma pierwszenstwo
-                    if(wycieczka == 1){
-                        
-                    }
-
                     packet_t pkt;
                     pkt.info = OK;
                     pkt.timestamp = zegarLamporta;
+                    pkt.liczba_ludzi = 0;
                     printf("[%d] [L:%d] Odpowiadam na żądanie wejścia\n", rank, zegarLamporta);
                     MPI_Send(&pkt, 1, MPI_PAKIET_T, status.MPI_SOURCE, WEJSCIE, MPI_COMM_WORLD );
                     //inkrementuj zegarLamporta po Send
@@ -192,6 +211,14 @@ int main(int argc, char* argv[]) {
                 {
                     printf("[%d] [L:%d] Otrzymałem wycieczkę\n", rank, zegarLamporta);
                     wycieczka = 1;
+                    ludzie[rank] = test.liczba_ludzi;
+                    break;
+                }
+                if(test.info == SKONCZYLEM)
+                {
+                    printf("[%d] [L:%d] Otrzymałem wiadomość, że proces [%d] skonczyl wycieczke (%d ludzi)\n", rank, zegarLamporta, status.MPI_SOURCE, test.liczba_ludzi);
+                    ludzie[status.MPI_SOURCE] = 0;
+                    kolejka_procesow.at(status.MPI_SOURCE) = -1;
                     break;
                 }
             }
