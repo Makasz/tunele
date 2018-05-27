@@ -22,29 +22,6 @@ typedef struct {
     int timestamp;
 } packet_t;
 
-void check_thread_support(int provided)
-{
-    printf("THREAD SUPPORT: %d\n", provided);
-    switch (provided) {
-        case MPI_THREAD_SINGLE: 
-            printf("Brak wsparcia dla wątków, kończę\n");
-            /* Nie ma co, trzeba wychodzić */
-	    fprintf(stderr, "Brak wystarczającego wsparcia dla wątków - wychodzę!\n");
-	    MPI_Finalize();
-	    exit(-1);
-	    break;
-        case MPI_THREAD_FUNNELED: 
-            printf("tylko te wątki, ktore wykonaly mpi_init_thread mogą wykonać wołania do biblioteki mpi\n");
-	    break;
-        case MPI_THREAD_SERIALIZED: 
-            /* Potrzebne zamki wokół wywołań biblioteki MPI */
-            printf("tylko jeden watek naraz może wykonać wołania do biblioteki MPI\n");
-	    break;
-        case MPI_THREAD_MULTIPLE: printf("Pełne wsparcie dla wątków\n");
-	    break;
-        default: printf("Nikt nic nie wie\n");
-    }
-}
 
 int losuj(){
     int wycieczka = rand() % 5;
@@ -110,9 +87,6 @@ int main(int argc, char* argv[]) {
     }
     
     srand(time(0) + rank);
-    pthread_t thread_id;
-    int rc;
-    int wycieczka = 0;
     printf("Starting thread!\n");
     thread losowanie(znajdz_wycieczke, &wycieczka, rank);
     printf("Thread started!\n");
@@ -195,6 +169,11 @@ int main(int argc, char* argv[]) {
                 //jesli otrzymano CHCEWEJSC odeslij OK
                 if(test.info == CHCEWEJSC)
                 {
+                    //Sprawdz kto ma pierwszenstwo
+                    if(wycieczka == 1){
+                        
+                    }
+
                     packet_t pkt;
                     pkt.info = OK;
                     pkt.timestamp = zegarLamporta;
