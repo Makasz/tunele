@@ -170,6 +170,7 @@ int main(int argc, char* argv[]) {
                 //jesli otrzymano CHCEWEJSC odeslij OK
                 if(test.info == CHCEWEJSC)
                 {
+                    kolejka_procesow.at(status.MPI_SOURCE) = test.timestamp;
                     //Sprawdz kto ma pierwszenstwo
                     if(wycieczka == 1){
                         
