@@ -19,7 +19,7 @@
 using namespace std;
 
 typedef struct {
-    int info; 
+    int info;
     int timestamp;
     int ludzie;
 } packet_t;
@@ -95,6 +95,30 @@ vector<int> sortowanie(vector<int> kolejka) {
     }
 };
 
+vector<int> sortowanie3(vector<int> kolejka)
+{
+	vector<int> result;
+	vector<int> tmpvec = kolejka;
+	sort(tmpvec.begin(), tmpvec.end());
+
+	for(int i = 0; i < tmpvec.size(); i++)
+	{
+		if(i > 0 && tmpvec[i-1] == tmpvec[i])
+		{
+			continue;
+		}
+		for(int j = 0; j < kolejka.size(); j++)
+		{
+			if(kolejka[j] == tmpvec[i])
+			{
+				result.push_back(j);
+			}
+		}
+	}
+	return result;
+}
+
+
 MPI_Datatype MPI_PAKIET_T;
 
 int main(int argc, char* argv[]) {
@@ -129,13 +153,13 @@ int main(int argc, char* argv[]) {
         czy_odp.push_back(0);
         liczba_ludzi.push_back(0);
     }
-    
+
     vector<int> randomvec = {-1, 2, 4, -1};
     randomvec = sortowanie2(randomvec);
     for(int i = 0; i<4; i++){
         printf("%d ", randomvec[i]);
     }
-    
+
 
 
 
@@ -235,10 +259,10 @@ int main(int argc, char* argv[]) {
         //jesli nie przyszla wycieczka odsylaj innym odpowiedzi
         else
         {
-            
+
             printf("[%d] [L:%d] Oczekuję na wiadomości\n", rank, zegarLamporta);
             for (int i = 0; i < size; i++)
-            {   
+            {
                 packet_t test;
                 MPI_Recv(&test, 1, MPI_PAKIET_T, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
                 printf("[%d] [L:%d] Otrzymałem wiadomość od [%d] [L:%d]\n", rank, zegarLamporta, status.MPI_SOURCE, test.timestamp);
