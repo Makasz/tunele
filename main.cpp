@@ -12,6 +12,7 @@
 #define OK 0
 #define CHCEWEJSC 1
 #define WEJSCIE 1
+#define WYCIECZKA 2
 
 
 using namespace std;
@@ -60,13 +61,20 @@ int max(int a, int b)
     else  return b;
 }
 
-void znajdz_wycieczke(int* wyc_a) {
+void znajdz_wycieczke(int* wyc_a, int rank) {
     while(1) {
         if(*wyc_a == 0){
             int loc = losuj();
             wyc_a = &loc;
             printf("Wylosowałem %d\n", *wyc_a);
             usleep(5000000);
+            if(*wyc_a == 1){
+                packet_t wyceczka_pkt;
+                //Wyślij informację samemu sobie, że otrzymałeś wycieczkę
+                pkt.info = WYCIECZKA;
+                pkt.timestamp = zegarLamporta;
+                MPI_Send(&wyceczka_pkt, 1, MPI_PAKIET_T, rank, WYCIECZKA, MPI_COMM_WORLD );
+            }
         }
     }
 }
@@ -82,12 +90,7 @@ int main(int argc, char* argv[]) {
     int size,rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
-    // int provided;
-    // MPI_Init_thread(&argc, &argv,MPI_THREAD_MULTIPLE, &provided);
-    // check_thread_support(provided);
-    // MPI_Init(&argc, &argv);                 //Start MPI
-    // MPI_Comm_rank(MPI_COMM_WORLD, &myid);           //get rank of node's process
-    // MPI_Comm_size(MPI_COMM_WORLD, &nodenum);
+
     const int nitems=2;
     int blocklengths[2] = {1,1};
     MPI_Datatype typy[2] = {MPI_INT, MPI_INT};
@@ -97,12 +100,6 @@ int main(int argc, char* argv[]) {
     offsets[1] = offsetof(packet_t, timestamp);
     MPI_Type_create_struct(nitems, blocklengths, offsets, typy, &MPI_PAKIET_T);
     MPI_Type_commit(&MPI_PAKIET_T);
-
-    // MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    // MPI_Comm_size(MPI_COMM_WORLD, &size);
-    // int kolejka_procesow[size];
-    // int czy_odp[size];
-    // print()
 
     vector<int> kolejka_procesow;
     vector<int> czy_odp;
@@ -117,7 +114,7 @@ int main(int argc, char* argv[]) {
     int rc;
     int wycieczka = 0;
     printf("Starting thread!\n");
-    thread losowanie(znajdz_wycieczke, &wycieczka);
+    thread losowanie(znajdz_wycieczke, &wycieczka, rank);
     printf("Thread started!\n");
     while(1) {
         //jesli przyszla wycieczka rob wszystko - wyslij CHCEWEJSC i czekaj na odpowiedzi od innych
@@ -187,12 +184,12 @@ int main(int argc, char* argv[]) {
         else
         {
             
-            printf("[%d] [L:%d] Oczekuję na żądania\n", rank, zegarLamporta);
+            printf("[%d] [L:%d] Oczekuję na wiadomości\n", rank, zegarLamporta);
             for (int i = 0; i < size; i++)
             {   
                 packet_t test;
                 MPI_Recv(&test, 1, MPI_PAKIET_T, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
-                printf("[%d] [L:%d] Otrzymałem żądanie od [%d] [L:%d]\n", rank, zegarLamporta, status.MPI_SOURCE, test.timestamp);
+                printf("[%d] [L:%d] Otrzymałem wiadomość od [%d] [L:%d]\n", rank, zegarLamporta, status.MPI_SOURCE, test.timestamp);
                 //aktualizuj zegarLamporta po Recv
                 zegarLamporta = max(zegarLamporta, test.timestamp) + 1;
                 //jesli otrzymano CHCEWEJSC odeslij OK
@@ -201,10 +198,15 @@ int main(int argc, char* argv[]) {
                     packet_t pkt;
                     pkt.info = OK;
                     pkt.timestamp = zegarLamporta;
-                    printf("[%d] [L:%d] Odpowiadam na żądanie\n", rank, zegarLamporta);
+                    printf("[%d] [L:%d] Odpowiadam na żądanie wejścia\n", rank, zegarLamporta);
                     MPI_Send(&pkt, 1, MPI_PAKIET_T, status.MPI_SOURCE, WEJSCIE, MPI_COMM_WORLD );
                     //inkrementuj zegarLamporta po Send
                     zegarLamporta++;
+                }
+                if(test.info == WYCIECZKA)
+                {
+                    printf("[%d] [L:%d] Otrzymałem wycieczkę\n", rank, zegarLamporta);
+                    break;
                 }
             }
         }
