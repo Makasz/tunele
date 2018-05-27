@@ -62,10 +62,12 @@ void znajdz_wycieczke(int* wyc_a, int rank, MPI_Datatype MPI_PAKIET_T) {
 
 vector<int> sortowanie2(vector<int> kolejka) {
     vector<int> nowy;
+    i = 0;
     while(!kolejka.empty()){
         vector<int>::iterator result = min_element(begin(kolejka), end(kolejka));
-        nowy.push_back(distance(begin(kolejka), result));
+        nowy.push_back(distance(begin(kolejka), result)+i);
         kolejka.erase(result);
+        i++;
     }
     return nowy;
 };
