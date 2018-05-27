@@ -92,6 +92,7 @@ int main(int argc, char* argv[]) {
     int zegarLamporta = 0;
     int wycieczka = 0;
     int rozmiar_podprzestrzeni = 10;
+    int ludzie_w_podprzestrzeni = 0;
     packet_t *rec_pkt;   //bylo pakiet_t ale zmienilem na packet_t bo chyba bylo zle
     MPI_Status status;
 
@@ -120,17 +121,6 @@ int main(int argc, char* argv[]) {
         czy_odp.push_back(0);
         liczba_ludzi.push_back(0);
     }
-
-    vector<int> randomvec = {-1, 2, 4, -1};
-    randomvec = sortowanie3(randomvec);
-    for(int i = 0; i<4; i++){
-        printf("%d ", randomvec[i]);
-    }
-
-
-
-
-
     srand(time(0) + rank);
     printf("Starting thread!\n");
     thread losowanie(znajdz_wycieczke, &wycieczka, rank, MPI_PAKIET_T);
@@ -197,27 +187,41 @@ int main(int argc, char* argv[]) {
                     }
                     if(flag_odp == 1){
                         end = true;
-                        printf("[%d] [L:%d] Przesyłam wycieczkę! \n", rank, zegarLamporta);
                         //Zerujemy tablice czy inni nam odpowiedzieli
                         for(int j = 0; j < size; j++){
                             czy_odp[j] = 0;
                         }
-
-
-
-                        usleep(2000000); //Czas trwania podróży
-                        //Wysyłam do wszytkich, że zakończyłem wycieczke (Zwalniam zasoby)
-                        for (int i = 0; i < size; i++)
-                        {
-                            if (i != rank) {
-                                packet_t pkt;
-                                pkt.info = SKONCZYLEM;
-                                pkt.timestamp = zegarLamporta;  //wysylamy nasz zegarLamporta
-                                pkt.ludzie = liczba_ludzi[rank];
-                                printf("[%d] [L:%d] Wysyałam wiadomość: SKONCZYLEM do %d\n", rank, zegarLamporta, i);
-                                MPI_Send(&pkt, 1, MPI_PAKIET_T, i, WEJSCIE, MPI_COMM_WORLD);
+                        vector<int> posortowane = sortowanie3(kolejka_procesow);
+                        for(int i = 0; i < posortowane.size(); i++){
+                            if(kolejka_procesow[posortowane[i]] == -1) continue;
+                            //Sprwadzamy czy jest miejsce w podprzestrzeni
+                            if(ludzie_w_podprzestrzeni + liczba_ludzi[posortowane[i]] <= rozmiar_podprzestrzeni){
+                                ludzie_w_podprzestrzeni += liczba_ludzi[posortowane[i]];
+                                //Jeśli jest nasza kolej to wysyłamy
+                                if(posortowane[i] == rank){
+                                    printf("[%d] [L:%d] Przesyłam wycieczkę! \n", rank, zegarLamporta);
+                                    usleep(2000000); //Czas trwania podróży
+                                    //Wysyłamy innym, że skończyliśmy
+                                    for (int i = 0; i < size; i++)
+                                        {
+                                            if (i != rank) {
+                                                packet_t pkt;
+                                                pkt.info = SKONCZYLEM;
+                                                pkt.timestamp = zegarLamporta;  //wysylamy nasz zegarLamporta
+                                                pkt.ludzie = liczba_ludzi[rank];
+                                                printf("[%d] [L:%d] Wysyałam wiadomość: SKONCZYLEM do %d\n", rank, zegarLamporta, i);
+                                                MPI_Send(&pkt, 1, MPI_PAKIET_T, i, WEJSCIE, MPI_COMM_WORLD);
+                                            }
+                                        }
+                                }
+                            } else {
+                                break;
                             }
                         }
+
+                        
+                        //Wysyłam do wszytkich, że zakończyłem wycieczke (Zwalniam zasoby)
+
                         zegarLamporta++;
                     }
                 //}
