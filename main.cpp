@@ -48,13 +48,14 @@ void znajdz_wycieczke(int* wyc_a, int rank, MPI_Datatype MPI_PAKIET_T) {
             wyc_a = &loc;
             printf("[%d] Wylosowałem %d\n",rank, *wyc_a);
             if(*wyc_a == 1){
+				*wyc_a = 0;
                 packet_t wyceczka_pkt;
                 //Wyślij informację samemu sobie, że otrzymałeś wycieczkę
                 wyceczka_pkt.info = WYCIECZKA;
                 wyceczka_pkt.timestamp = -1;
                 wyceczka_pkt.ludzie = rand() % 10 + 1;
                 MPI_Send(&wyceczka_pkt, 1, MPI_PAKIET_T, rank, WYCIECZKA, MPI_COMM_WORLD );
-                *wyc_a = 0;
+
             }
             usleep(2000000);
         }
@@ -130,7 +131,7 @@ int main(int argc, char* argv[]) {
         printf("[%d] [L:%d] Czy mam wycieczkę: %d\n", rank, zegarLamporta, wycieczka);
         if (wycieczka > 0)
         {
-            
+
             //wyślij wszystkim CHCEWEJSC
             for (int i = 0; i < size; i++)
             {
@@ -212,7 +213,7 @@ int main(int argc, char* argv[]) {
                                             pkt.timestamp = zegarLamporta;  //wysylamy nasz zegarLamporta
                                             pkt.ludzie = liczba_ludzi[rank];
                                             printf("[%d] [L:%d] Wysyałam wiadomość: SKONCZYLEM do %d\n", rank, zegarLamporta, i);
-                                            MPI_Send(&pkt, 1, MPI_PAKIET_T, i, WEJSCIE, MPI_COMM_WORLD);           
+                                            MPI_Send(&pkt, 1, MPI_PAKIET_T, i, WEJSCIE, MPI_COMM_WORLD);
                                         }
                                     }
                                     liczba_ludzi[rank] = 0;
@@ -224,7 +225,7 @@ int main(int argc, char* argv[]) {
                             }
                         }
 
-                        
+
                         //Wysyłam do wszytkich, że zakończyłem wycieczke (Zwalniam zasoby)
 
                         zegarLamporta++;
