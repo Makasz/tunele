@@ -197,35 +197,55 @@ int main(int argc, char* argv[]) {
                             czy_odp[j] = 0;
                         }
                         vector<int> posortowane = sortowanie3(kolejka_procesow);
-                        for(int i = 0; i < posortowane.size(); i++){
-                            if(kolejka_procesow[posortowane[i]] == -1) continue;
-                            //Sprwadzamy czy jest miejsce w podprzestrzeni
-                             printf("[%d] [L:%d] Proces [%d] jest %d w kolejce (%d osob)\n", rank, zegarLamporta, posortowane[i], i, liczba_ludzi[posortowane[i]]);
-                            if(ludzie_w_podprzestrzeni + liczba_ludzi[posortowane[i]] <= rozmiar_podprzestrzeni){
-                                ludzie_w_podprzestrzeni += liczba_ludzi[posortowane[i]];
-                                //Jeśli jest nasza kolej to wysyłamy
-                                if(posortowane[i] == rank){
-                                    printf("[%d] [L:%d] Przesyłam wycieczkę (%d osób)! \n", rank, zegarLamporta, liczba_ludzi[rank]);
-                                    usleep(5000000); //Czas trwania podróży
-                                    ludzie_w_podprzestrzeni -= liczba_ludzi[posortowane[i]];
-                                    //Wysyłamy innym, że skończyliśmy
-                                    for (int i = 0; i < size; i++){
-                                        if (i != rank) {
-                                            packet_t pkt;
-                                            pkt.info = SKONCZYLEM;
-                                            pkt.timestamp = zegarLamporta;  //wysylamy nasz zegarLamporta
-                                            pkt.ludzie = liczba_ludzi[rank];
-                                            printf("[%d] [L:%d] Wysyałam wiadomość: SKONCZYLEM do %d\n", rank, zegarLamporta, i);
-                                            MPI_Send(&pkt, 1, MPI_PAKIET_T, i, WEJSCIE, MPI_COMM_WORLD);
-                                        }
-                                    }
-                                    liczba_ludzi[rank] = 0;
-                                    kolejka_procesow.at(rank) = -1;
-                                    wycieczka = 0;
-                                }
-                            } else {
-                                break;
-                            }
+                        bool end1 = false;
+                        while( !end1 ){
+							for(int i = 0; i < posortowane.size(); i++){
+								if(kolejka_procesow[posortowane[i]] == -1) continue;
+								//Sprwadzamy czy jest miejsce w podprzestrzeni
+								printf("[%d] [L:%d] Proces [%d] jest %d w kolejce (%d osob)\n", rank, zegarLamporta, posortowane[i], i, liczba_ludzi[posortowane[i]]);
+								if(ludzie_w_podprzestrzeni + liczba_ludzi[posortowane[i]] <= rozmiar_podprzestrzeni){
+									ludzie_w_podprzestrzeni += liczba_ludzi[posortowane[i]];
+									//Jeśli jest nasza kolej to wysyłamy
+									if(posortowane[i] == rank){
+										printf("[%d] [L:%d] Przesyłam wycieczkę (%d osób)! \n", rank, zegarLamporta, liczba_ludzi[rank]);
+										usleep(5000000); //Czas trwania podróży
+										ludzie_w_podprzestrzeni -= liczba_ludzi[posortowane[i]];
+										//Wysyłamy innym, że skończyliśmy
+										for (int i = 0; i < size; i++){
+											if (i != rank) {
+												packet_t pkt;
+												pkt.info = SKONCZYLEM;
+												pkt.timestamp = zegarLamporta;  //wysylamy nasz zegarLamporta
+												pkt.ludzie = liczba_ludzi[rank];
+												printf("[%d] [L:%d] Wysyałam wiadomość: SKONCZYLEM do %d\n", rank, zegarLamporta, i);
+												MPI_Send(&pkt, 1, MPI_PAKIET_T, i, WEJSCIE, MPI_COMM_WORLD);
+												end1 = true;
+											}
+										}
+										liczba_ludzi[rank] = 0;
+										kolejka_procesow.at(rank) = -1;
+										wycieczka = 0;
+									}
+								} else {
+									break;
+								}
+							}
+							if( !end1 )
+							{
+								packet_t test;
+								MPI_Recv(&test, 1, MPI_PAKIET_T, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+								printf("[%d] [L:%d] Otrzymałem wiadomość od [%d] [L:%d]\n", rank, zegarLamporta, status.MPI_SOURCE, test.timestamp);
+								//aktualizuj zegarLamporta po Recv
+								zegarLamporta = max(zegarLamporta, test.timestamp) + 1;
+								if(test.info == SKONCZYLEM)
+								{
+									printf("[%d] [L:%d] Otrzymałem wiadomość, że proces [%d] skonczyl wycieczke (%d ludzi)\n", rank, zegarLamporta, status.MPI_SOURCE, test.ludzie);
+									ludzie_w_podprzestrzeni -= test.ludzie;
+									liczba_ludzi[status.MPI_SOURCE] = 0;
+									kolejka_procesow.at(status.MPI_SOURCE) = -1;
+									break;
+								}
+							}
                         }
 
 
