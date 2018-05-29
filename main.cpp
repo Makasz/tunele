@@ -205,7 +205,7 @@ int main(int argc, char* argv[]) {
                                 ludzie_w_podprzestrzeni += liczba_ludzi[posortowane[i]];
                                 //Jeśli jest nasza kolej to wysyłamy
                                 if(posortowane[i] == rank){
-                                    printf("[%d] [L:%d] Przesyłam wycieczkę (%d osób)! \n", rank, zegarLamporta, liczba_ludzi[posortowane[i]]);
+                                    printf("[%d] [L:%d] Przesyłam wycieczkę (%d osób)! \n", rank, zegarLamporta, liczba_ludzi[rank]);
                                     usleep(5000000); //Czas trwania podróży
                                     ludzie_w_podprzestrzeni -= liczba_ludzi[posortowane[i]];
                                     //Wysyłamy innym, że skończyliśmy
