@@ -92,7 +92,7 @@ MPI_Datatype MPI_PAKIET_T;
 int main(int argc, char* argv[]) {
     int zegarLamporta = 0;
 
-    int rozmiar_podprzestrzeni = 20;
+    int rozmiar_podprzestrzeni = 12;
     int ludzie_w_podprzestrzeni = 0;
     packet_t *rec_pkt;   //bylo pakiet_t ale zmienilem na packet_t bo chyba bylo zle
     MPI_Status status;
