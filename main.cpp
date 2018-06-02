@@ -25,6 +25,7 @@ typedef struct {
     int ludzie;
 } packet_t;
 
+MPI_Datatype MPI_PAKIET_T;
 
 int losuj(){
     int wycieczka = rand() % 5;
@@ -86,7 +87,7 @@ vector<int> sortowanie3(vector<int> kolejka)
 	return result;
 }
 
-void inicjalizuj(int argc, char* argv, int &rank,int &size,int &wycieczka, vector<int> &kolejka_procesow, vector<int> &czy_odp, vector<int> &liczba_ludzi){
+void inicjalizuj(int argc, char* argv[], int &rank,int &size,int &wycieczka, vector<int> &kolejka_procesow, vector<int> &czy_odp, vector<int> &liczba_ludzi){
     MPI_Init(&argc, &argv);
 
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -116,7 +117,7 @@ void inicjalizuj(int argc, char* argv, int &rank,int &size,int &wycieczka, vecto
 }
 
 
-MPI_Datatype MPI_PAKIET_T;
+
 
 int main(int argc, char* argv[]) {
     int zegarLamporta = 0;
