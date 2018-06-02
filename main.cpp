@@ -86,7 +86,7 @@ vector<int> sortowanie3(vector<int> kolejka)
 	return result;
 }
 
-void inicjalizuj(inr argc, char* argv, int &rank,int &size,int &wycieczka, vector<int> &kolejka_procesow, vector<int> &czy_odp, vector<int> &liczba_ludzi){
+void inicjalizuj(int argc, char* argv, int &rank,int &size,int &wycieczka, vector<int> &kolejka_procesow, vector<int> &czy_odp, vector<int> &liczba_ludzi){
     MPI_Init(&argc, &argv);
 
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
