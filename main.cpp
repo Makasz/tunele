@@ -46,7 +46,7 @@ void znajdz_wycieczke(int &wyc_a, int rank, MPI_Datatype MPI_PAKIET_T) {
     while(1) {
         if(wyc_a == 0){
             int loc = losuj();
-            wyc_a = &loc;
+            wyc_a = loc;
             printf("[%d] Wylosowałem %d\n",rank, wyc_a);
             if(wyc_a == 1){
 				wyc_a = 0;
