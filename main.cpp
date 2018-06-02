@@ -89,21 +89,21 @@ vector<int> sortowanie3(vector<int> kolejka)
 
 void inicjalizuj(int argc, char* argv[], int &rank,int &size,int &wycieczka, vector<int> &kolejka_procesow, vector<int> &czy_odp, vector<int> &liczba_ludzi){
     MPI_Init(&argc, &argv);
-
+    print("1");
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
-
+print("1");
     const int nitems=3;
     int blocklengths[3] = {1,1,1};
     MPI_Datatype typy[3] = {MPI_INT, MPI_INT, MPI_INT};
     MPI_Aint offsets[3];
-
+print("1");
     offsets[0] = offsetof(packet_t, info);
     offsets[1] = offsetof(packet_t, timestamp);
     offsets[2] = offsetof(packet_t, ludzie);
     MPI_Type_create_struct(nitems, blocklengths, offsets, typy, &MPI_PAKIET_T);
     MPI_Type_commit(&MPI_PAKIET_T);
-
+print("1");
     for(int i = 0; i < size; i++)
     {
         kolejka_procesow.push_back(-1);
