@@ -85,9 +85,19 @@ vector<int> sortowanie3(vector<int> kolejka)
 	return result;
 }
 
-void inicjalizuj(int &rank,int &size, vector<int> &kolejka_procesow, vector<int> &czy_odp, vector<int> &liczba_ludzi){
-    MPI_Init(&argc, &argv);
 
+MPI_Datatype MPI_PAKIET_T;
+
+int main(int argc, char* argv[]) {
+    int zegarLamporta = 0;
+
+    int rozmiar_podprzestrzeni = 10;
+    int ludzie_w_podprzestrzeni = 0;
+    packet_t *rec_pkt;   //bylo pakiet_t ale zmienilem na packet_t bo chyba bylo zle
+    MPI_Status status;
+
+    MPI_Init(&argc, &argv);
+    int size,rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
@@ -101,7 +111,10 @@ void inicjalizuj(int &rank,int &size, vector<int> &kolejka_procesow, vector<int>
     offsets[2] = offsetof(packet_t, ludzie);
     MPI_Type_create_struct(nitems, blocklengths, offsets, typy, &MPI_PAKIET_T);
     MPI_Type_commit(&MPI_PAKIET_T);
-
+    int wycieczka = 0;
+    vector<int> kolejka_procesow;
+    vector<int> czy_odp;
+    vector<int> liczba_ludzi;
     for(int i = 0; i < size; i++)
     {
         kolejka_procesow.push_back(-1);
@@ -112,26 +125,6 @@ void inicjalizuj(int &rank,int &size, vector<int> &kolejka_procesow, vector<int>
     printf("Starting thread!\n");
     thread losowanie(znajdz_wycieczke, &wycieczka, rank, MPI_PAKIET_T);
     printf("Thread started!\n");
-}
-
-
-MPI_Datatype MPI_PAKIET_T;
-
-int main(int argc, char* argv[]) {
-    int zegarLamporta = 0;
-    int size,rank;
-    int rozmiar_podprzestrzeni = 10;
-    int ludzie_w_podprzestrzeni = 0;
-    int wycieczka = 0;
-    vector<int> kolejka_procesow;
-    vector<int> czy_odp;
-    vector<int> liczba_ludzi;
-    packet_t *rec_pkt;   //bylo pakiet_t ale zmienilem na packet_t bo chyba bylo zle
-    MPI_Status status;
-
-    inicjalizuj(rank, size, kolejka_procesow, czy_odp, liczba_ludzi);
-
-
     while(1) {
         //jesli przyszla wycieczka rob wszystko - wyslij CHCEWEJSC i czekaj na odpowiedzi od innych
         printf("[%d] [L:%d] Czy mam wycieczkę: %d\n", rank, zegarLamporta, wycieczka);
