@@ -111,7 +111,9 @@ printf("1");
         liczba_ludzi.push_back(0);
     }
     srand(time(0) + rank);
-
+    printf("Starting thread!\n");
+    thread losowanie(znajdz_wycieczke, ref(wycieczka), rank, MPI_PAKIET_T);
+    printf("Thread started!\n");
 }
 
 
@@ -131,9 +133,7 @@ int main(int argc, char* argv[]) {
     printf("1");
     MPI_Init(&argc, &argv);
     inicjalizuj(argc, argv, rank, size, wycieczka, kolejka_procesow, czy_odp, liczba_ludzi);
-    printf("Starting thread!\n");
-    thread losowanie(znajdz_wycieczke, wycieczka, rank, MPI_PAKIET_T);
-    printf("Thread started!\n");
+
 
     while(1) {
         //jesli przyszla wycieczka rob wszystko - wyslij CHCEWEJSC i czekaj na odpowiedzi od innych
