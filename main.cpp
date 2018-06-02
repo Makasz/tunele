@@ -86,7 +86,7 @@ vector<int> sortowanie3(vector<int> kolejka)
 	return result;
 }
 
-void inicjalizuj(int &rank,int &size, vector<int> &kolejka_procesow, vector<int> &czy_odp, vector<int> &liczba_ludzi){
+void inicjalizuj(inr argc, char* argv, int &rank,int &size,int &wycieczka, vector<int> &kolejka_procesow, vector<int> &czy_odp, vector<int> &liczba_ludzi){
     MPI_Init(&argc, &argv);
 
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -130,7 +130,7 @@ int main(int argc, char* argv[]) {
     packet_t *rec_pkt;   //bylo pakiet_t ale zmienilem na packet_t bo chyba bylo zle
     MPI_Status status;
 
-    inicjalizuj(rank, size, kolejka_procesow, czy_odp, liczba_ludzi);
+    inicjalizuj(argc, argv, rank, size, wycieczka, kolejka_procesow, czy_odp, liczba_ludzi);
 
 
     while(1) {
