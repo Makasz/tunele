@@ -130,6 +130,7 @@ int main(int argc, char* argv[]) {
     vector<int> liczba_ludzi;
     packet_t *rec_pkt;   //bylo pakiet_t ale zmienilem na packet_t bo chyba bylo zle
     MPI_Status status;
+    printf("1");
     MPI_Init(&argc, &argv);
     inicjalizuj(argc, argv, rank, size, wycieczka, kolejka_procesow, czy_odp, liczba_ludzi);
 
