@@ -185,7 +185,7 @@ int main(int argc, char* argv[]) {
                     }
                     else if(allow_packet.info == SKONCZYLEM)
                     {
-                        printf("[%d] [L:%d] Otrzymałem wiadomość, że proces [%d] skonczyl wycieczke (%d ludzi)\n", rank, zegarLamporta, status.MPI_SOURCE, test.ludzie);
+                        printf("[%d] [L:%d] Otrzymałem wiadomość, że proces [%d] skonczyl wycieczke (%d ludzi)\n", rank, zegarLamporta, status.MPI_SOURCE, allow_packet.ludzie);
                         ludzie_w_podprzestrzeni -= allow_packet.ludzie;
                         liczba_ludzi[status.MPI_SOURCE] = 0;
                         kolejka_procesow.at(status.MPI_SOURCE) = -1;
