@@ -26,6 +26,7 @@ typedef struct {
     int ludzie;
 } packet_t;
 
+int debug;
 MPI_Datatype MPI_PAKIET_T;
 
 int losuj(){
@@ -48,7 +49,7 @@ void znajdz_wycieczke(int &wyc_a, int rank, MPI_Datatype MPI_PAKIET_T, int max_o
         if(wyc_a == 0){
             int loc = losuj();
             wyc_a = loc;
-            printf("[%d] Wylosowałem %d\n",rank, wyc_a);
+            if(debug) printf("[%d] Wylosowałem %d\n",rank, wyc_a);
             if(wyc_a == 1){
 				wyc_a = 0;
                 packet_t wyceczka_pkt;
@@ -125,7 +126,7 @@ int main(int argc, char* argv[]) {
     MPI_Init(&argc, &argv);
     int rozmiar_podprzestrzeni = atoi(argv[1]);
     int max_osob_wycieczka = atoi(argv[2]);
-    int debug = atoi(argv[3]);
+    debug = atoi(argv[3]);
     printf("Rozmiar podprzestrzeni: %d, Max osób w wycieczce: %d \n",rozmiar_podprzestrzeni, max_osob_wycieczka);
     inicjalizuj(argc, argv, rank, size, kolejka_procesow, czy_odp, liczba_ludzi);
     if(debug) printf("Starting thread!\n");
