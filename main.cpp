@@ -117,6 +117,7 @@ printf("1");
 
 
 int main(int argc, char* argv[]) {
+    printf("Rozmiar podprzestrzeni: %d\n, Max osób w wycieczce: %d", argv[1], argv[2])
     int zegarLamporta = 0;
     int size,rank;
     int rozmiar_podprzestrzeni = 10;
