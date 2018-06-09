@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include <thread>
 #include <algorithm>
+#include <cstdlib>
 
 #define SEED 35791246
 #define OK 0
@@ -114,7 +115,8 @@ void inicjalizuj(int argc, char* argv[], int &rank,int &size, vector<int> &kolej
 int main(int argc, char* argv[]) {
     int zegarLamporta = 0;
     int size,rank;
-    int rozmiar_podprzestrzeni = 10;
+    int rozmiar_podprzestrzeni = atoi(argv[1]);
+    int max_osob_wycieczka = atoi(argv[2];)
     int ludzie_w_podprzestrzeni = 0;
     int wycieczka = 0;
     vector<int> kolejka_procesow;
@@ -123,7 +125,7 @@ int main(int argc, char* argv[]) {
     packet_t *rec_pkt;
     MPI_Status status;
     MPI_Init(&argc, &argv);
-    printf("Rozmiar podprzestrzeni: %d, Max osób w wycieczce: %d \n", (int)argv[1], (int)argv[2]);
+    printf("Rozmiar podprzestrzeni: %d, Max osób w wycieczce: %d \n",rozmiar_podprzestrzeni, max_osob_wycieczka);
     inicjalizuj(argc, argv, rank, size, kolejka_procesow, czy_odp, liczba_ludzi);
     printf("Starting thread!\n");
     thread losowanie(znajdz_wycieczke, ref(wycieczka), rank, MPI_PAKIET_T);
