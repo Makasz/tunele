@@ -168,7 +168,8 @@ int main(int argc, char* argv[]) {
                     printf("[%d] [L:%d] Otrzymałem wiadomość (czekam na wejscie do sekcji) [%d]\n", rank, zegarLamporta, status.MPI_SOURCE);
                     liczba_ludzi[status.MPI_SOURCE] = allow_packet.ludzie;
                     //oznacz w tablicy czy_odp ze juz przyszla odpowiedz od tego procesu
-                    czy_odp.at(status.MPI_SOURCE) = 1;
+                    if(allow_packet.info != SKONCZYLEM)
+                        czy_odp.at(status.MPI_SOURCE) = 1;
                     //jesli ok to nie ma problemu
                     if(allow_packet.info == OK)
                     {
