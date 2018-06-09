@@ -116,7 +116,7 @@ int main(int argc, char* argv[]) {
     int zegarLamporta = 0;
     int size,rank;
     int rozmiar_podprzestrzeni = atoi(argv[1]);
-    int max_osob_wycieczka = atoi(argv[2];)
+    int max_osob_wycieczka = atoi(argv[2]);
     int ludzie_w_podprzestrzeni = 0;
     int wycieczka = 0;
     vector<int> kolejka_procesow;
