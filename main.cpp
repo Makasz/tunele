@@ -117,7 +117,6 @@ printf("1");
 
 
 int main(int argc, char* argv[]) {
-    printf("Rozmiar podprzestrzeni: %d\n, Max osób w wycieczce: %d", argv[1], argv[2]);
     int zegarLamporta = 0;
     int size,rank;
     int rozmiar_podprzestrzeni = 10;
@@ -130,6 +129,7 @@ int main(int argc, char* argv[]) {
     MPI_Status status;
     printf("1");
     MPI_Init(&argc, &argv);
+    printf("Rozmiar podprzestrzeni: %d, Max osób w wycieczce: %d \n", argv[1], argv[2]);
     inicjalizuj(argc, argv, rank, size, kolejka_procesow, czy_odp, liczba_ludzi);
     printf("Starting thread!\n");
     thread losowanie(znajdz_wycieczke, ref(wycieczka), rank, MPI_PAKIET_T);
