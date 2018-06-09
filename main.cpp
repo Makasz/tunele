@@ -183,6 +183,14 @@ int main(int argc, char* argv[]) {
                         kolejka_procesow.at(status.MPI_SOURCE) = allow_packet.timestamp;
                         //Narazie wystarczy, że dostaniemy odpowiedź od każdego żeby wysłać wycieczkę
                     }
+                    else if(allow_packet.info == SKONCZYLEM)
+                    {
+                        printf("[%d] [L:%d] Otrzymałem wiadomość, że proces [%d] skonczyl wycieczke (%d ludzi)\n", rank, zegarLamporta, status.MPI_SOURCE, test.ludzie);
+                        ludzie_w_podprzestrzeni -= allow_packet.ludzie;
+                        liczba_ludzi[status.MPI_SOURCE] = 0;
+                        kolejka_procesow.at(status.MPI_SOURCE) = -1;
+                        break;
+                    }
                     //sprawdzamy czy mamy juz odpowiedz od wszystkich
                     int flag_odp = 1;
                     for(int j = 0; j < size; j++)
