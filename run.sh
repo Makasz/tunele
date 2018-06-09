@@ -1,3 +1,3 @@
 git pull
 mpic++ main.cpp
-mpirun a.out -n 4
+mpirun -n4 a.out 20 10
