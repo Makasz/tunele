@@ -88,22 +88,17 @@ vector<int> sortowanie3(vector<int> kolejka)
 }
 
 void inicjalizuj(int argc, char* argv[], int &rank,int &size, vector<int> &kolejka_procesow, vector<int> &czy_odp, vector<int> &liczba_ludzi){
-
-    printf("1");
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
-printf("1");
     const int nitems=3;
     int blocklengths[3] = {1,1,1};
     MPI_Datatype typy[3] = {MPI_INT, MPI_INT, MPI_INT};
     MPI_Aint offsets[3];
-printf("1");
     offsets[0] = offsetof(packet_t, info);
     offsets[1] = offsetof(packet_t, timestamp);
     offsets[2] = offsetof(packet_t, ludzie);
     MPI_Type_create_struct(nitems, blocklengths, offsets, typy, &MPI_PAKIET_T);
     MPI_Type_commit(&MPI_PAKIET_T);
-printf("1");
     for(int i = 0; i < size; i++)
     {
         kolejka_procesow.push_back(-1);
@@ -127,9 +122,8 @@ int main(int argc, char* argv[]) {
     vector<int> liczba_ludzi;
     packet_t *rec_pkt;
     MPI_Status status;
-    printf("1");
     MPI_Init(&argc, &argv);
-    printf("Rozmiar podprzestrzeni: %d, Max osób w wycieczce: %d \n", argv[1], argv[2]);
+    printf("Rozmiar podprzestrzeni: %d, Max osób w wycieczce: %d \n", (int)argv[1], (int)argv[2]);
     inicjalizuj(argc, argv, rank, size, kolejka_procesow, czy_odp, liczba_ludzi);
     printf("Starting thread!\n");
     thread losowanie(znajdz_wycieczke, ref(wycieczka), rank, MPI_PAKIET_T);
