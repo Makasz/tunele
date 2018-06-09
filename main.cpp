@@ -139,18 +139,18 @@ int main(int argc, char* argv[]) {
             //wyślij wszystkim CHCEWEJSC
             for (int i = 0; i < size; i++)
             {
-                if (i != rank) {
+                //if (i != rank) {
                     packet_t pkt;
                     pkt.info = CHCEWEJSC;
                     pkt.timestamp = zegarLamporta;  //wysylamy nasz zegarLamporta
                     pkt.ludzie = liczba_ludzi[rank];
                     printf("[%d] [L:%d] Wysyałam wiadomość: CHCEWEJSC do %d\n", rank, zegarLamporta, i);
                     MPI_Send(&pkt, 1, MPI_PAKIET_T, i, WEJSCIE, MPI_COMM_WORLD);
-                }
+                //}
             }
             //"odpowiedz" sam do siebie
-            czy_odp.at(rank) = 1;
-            kolejka_procesow.at(rank) = zegarLamporta;
+            //czy_odp.at(rank) = 1;
+            //kolejka_procesow.at(rank) = zegarLamporta;
 			//inkrementuj zegarLamporta po broadcascie
 			zegarLamporta++;
             //czekaj na odpowiedz od wszystkich
@@ -229,7 +229,7 @@ int main(int argc, char* argv[]) {
 										ludzie_w_podprzestrzeni -= liczba_ludzi[posortowane[i]];
 										//Wysyłamy innym, że skończyliśmy
 										for (int i = 0; i < size; i++){
-											if (i != rank) {
+											//if (i != rank) {
 												packet_t pkt;
 												pkt.info = SKONCZYLEM;
 												pkt.timestamp = zegarLamporta;  //wysylamy nasz zegarLamporta
@@ -237,7 +237,7 @@ int main(int argc, char* argv[]) {
 												printf("[%d] [L:%d] Wysyałam wiadomość: SKONCZYLEM do %d\n", rank, zegarLamporta, i);
 												MPI_Send(&pkt, 1, MPI_PAKIET_T, i, WEJSCIE, MPI_COMM_WORLD);
 												end1 = true;
-											}
+											//}
 										}
 										liczba_ludzi[rank] = 0;
 										kolejka_procesow.at(rank) = -1;
