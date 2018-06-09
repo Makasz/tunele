@@ -211,7 +211,7 @@ int main(int argc, char* argv[]) {
 								printf("[%d] [L:%d] Moja kolejka: ", rank, zegarLamporta);
 								for(int h = 0; h < posortowane.size(); h++)
 								{
-									printf("%d: [%d] ", posortowane[h]. kolejka_procesow[h]);
+									printf("%d: [%d] ", posortowane[h], kolejka_procesow[posortoweane[h]]);
 								}
 								printf("\n");
 								printf("[%d] [L:%d] Proces [%d] jest %d w kolejce (%d osob)\n", rank, zegarLamporta, posortowane[i], i, liczba_ludzi[posortowane[i]]);
