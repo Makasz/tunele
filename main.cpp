@@ -43,7 +43,7 @@ int max(int a, int b)
     else  return b;
 }
 
-void znajdz_wycieczke(int &wyc_a, int rank, MPI_Datatype MPI_PAKIET_T) {
+void znajdz_wycieczke(int &wyc_a, int rank, MPI_Datatype MPI_PAKIET_T, int max_os) {
     while(1) {
         if(wyc_a == 0){
             int loc = losuj();
@@ -55,7 +55,7 @@ void znajdz_wycieczke(int &wyc_a, int rank, MPI_Datatype MPI_PAKIET_T) {
                 //Wyślij informację samemu sobie, że otrzymałeś wycieczkę
                 wyceczka_pkt.info = WYCIECZKA;
                 wyceczka_pkt.timestamp = -1;
-                wyceczka_pkt.ludzie = rand() % 10 + 1;
+                wyceczka_pkt.ludzie = rand() % max_os + 1;
                 MPI_Send(&wyceczka_pkt, 1, MPI_PAKIET_T, rank, WYCIECZKA, MPI_COMM_WORLD );
 
             }
@@ -128,7 +128,7 @@ int main(int argc, char* argv[]) {
     printf("Rozmiar podprzestrzeni: %d, Max osób w wycieczce: %d \n",rozmiar_podprzestrzeni, max_osob_wycieczka);
     inicjalizuj(argc, argv, rank, size, kolejka_procesow, czy_odp, liczba_ludzi);
     printf("Starting thread!\n");
-    thread losowanie(znajdz_wycieczke, ref(wycieczka), rank, MPI_PAKIET_T);
+    thread losowanie(znajdz_wycieczke, ref(wycieczka), rank, MPI_PAKIET_T, max_osob_wycieczka);
     printf("Thread started!\n");
 
     while(1) {
