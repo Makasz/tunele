@@ -238,6 +238,7 @@ int main(int argc, char* argv[]) {
 												pkt.timestamp = zegarLamporta;  //wysylamy nasz zegarLamporta
 												pkt.ludzie = liczba_ludzi[rank];
 												if(debug) printf("[%d] [L:%d] Wysyałam wiadomość: SKONCZYLEM do %d\n", rank, zegarLamporta, i);
+                                                if(!debug && i==0) printf("[%d] [L:%d] Skończyłem przesyłanie wycieczki!\n", rank, zegarLamporta);
 												MPI_Send(&pkt, 1, MPI_PAKIET_T, i, WEJSCIE, MPI_COMM_WORLD);
 												end1 = true;
 											//}
