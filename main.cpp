@@ -125,7 +125,7 @@ int main(int argc, char* argv[]) {
     vector<int> kolejka_procesow;
     vector<int> czy_odp;
     vector<int> liczba_ludzi;
-    packet_t *rec_pkt;   //bylo pakiet_t ale zmienilem na packet_t bo chyba bylo zle
+    packet_t *rec_pkt;
     MPI_Status status;
     printf("1");
     MPI_Init(&argc, &argv);
@@ -139,7 +139,6 @@ int main(int argc, char* argv[]) {
         printf("[%d] [L:%d] Czy mam wycieczkę: %d\n", rank, zegarLamporta, wycieczka);
         if (wycieczka > 0)
         {
-
             //wyślij wszystkim CHCEWEJSC
             for (int i = 0; i < size; i++)
             {
@@ -152,12 +151,11 @@ int main(int argc, char* argv[]) {
                     MPI_Send(&pkt, 1, MPI_PAKIET_T, i, WEJSCIE, MPI_COMM_WORLD);
                 }
             }
-            //inkrementuj zegarLamporta po broadcascie
-            zegarLamporta++;
             //"odpowiedz" sam do siebie
             czy_odp.at(rank) = 1;
             kolejka_procesow.at(rank) = zegarLamporta;
-
+			//inkrementuj zegarLamporta po broadcascie
+			zegarLamporta++;
             //czekaj na odpowiedz od wszystkich
             bool end = false;
             while( !end )
@@ -239,6 +237,7 @@ int main(int argc, char* argv[]) {
 										liczba_ludzi[rank] = 0;
 										kolejka_procesow.at(rank) = -1;
 										wycieczka = 0;
+										zegarLamporta++;
 									}
 								} else {
 									break;
