@@ -6,4 +6,4 @@ if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]
 fi
 git pull
 mpic++ main.cpp
-mpirun -n 4 a.out $1 $2 $3
+mpirun -n 20 --hostfile $4 a.out $1 $2 $3
